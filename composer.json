@@ -1,0 +1,19 @@
+{
+    "name": "tijmen-wierenga/cerberus",
+    "description": "Full authentication and authorization with OAuth2",
+    "require-dev": {
+        "phpunit/phpunit": "^6.5",
+        "symfony/var-dumper": "^4.0",
+        "phpstan/phpstan": "^0.9.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tijmen Wierenga",
+            "email": "t.wierenga@live.nl"
+        }
+    ],
+    "require": {
+        "league/oauth2-server": "^6.1"
+    }
+}
