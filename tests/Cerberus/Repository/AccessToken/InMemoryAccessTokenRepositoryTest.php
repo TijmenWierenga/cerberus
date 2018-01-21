@@ -3,6 +3,7 @@ namespace TijmenWierenga\Tests\Cerberus\Repository\AccessToken;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -17,14 +18,14 @@ class InMemoryAccessTokenRepositoryTest extends TestCase
     {
         $repository = new InMemoryAccessTokenRepository();
         $client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
-        $scopes = ["test", "another"];
+        $scope = $this->getMockBuilder(ScopeEntityInterface::class)->getMock();
+        $scopes = [$scope];
         $userId = Uuid::uuid4();
         $token = $repository->getNewToken($client, $scopes, $userId);
 
         $this->assertInstanceOf(AccessTokenEntityInterface::class, $token);
         $this->assertEquals((string) $userId, $token->getUserIdentifier());
-        $this->assertContains("test", $token->getScopes());
-        $this->assertContains("another", $token->getScopes());
+        $this->assertContains($scope, $token->getScopes());
         $this->assertEquals($client, $token->getClient());
 
         return $token;
