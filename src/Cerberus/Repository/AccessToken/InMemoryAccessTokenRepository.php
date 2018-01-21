@@ -66,7 +66,13 @@ class InMemoryAccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function revokeAccessToken($tokenId): void
     {
-        // TODO: Implement revokeAccessToken() method.
+        $result = $this->collection->filter(function (AccessTokenEntityInterface $token) use ($tokenId) {
+            return $token->getIdentifier() === $tokenId;
+        });
+
+        if (! $result->isEmpty()) {
+            $this->collection->removeElement($result->first());
+        }
     }
 
     /**
@@ -78,6 +84,14 @@ class InMemoryAccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function isAccessTokenRevoked($tokenId): bool
     {
-        // TODO: Implement isAccessTokenRevoked() method.
+        $result = $this->collection->filter(function (AccessTokenEntityInterface $token) use ($tokenId) {
+            return $token->getIdentifier() === $tokenId;
+        });
+
+        if (! $result->isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }
