@@ -27,7 +27,7 @@ class AccessToken implements AccessTokenEntityInterface
      */
     private $expiryDateTime;
     /**
-     * @var UuidInterface
+     * @var string|null
      */
     private $userIdentifier;
     /**
@@ -35,21 +35,21 @@ class AccessToken implements AccessTokenEntityInterface
      */
     private $scopes;
     /**
-     * @var UuidInterface
+     * @var string
      */
     private $identifier;
 
     /**
      * AccessToken constructor.
-     * @param UuidInterface $identifier
-     * @param UuidInterface $userIdentifier
+     * @param string $identifier
+     * @param string|null $userIdentifier
      * @param ClientEntityInterface $client
      * @param Collection|ScopeEntityInterface[] $scopes
      * @param DateTime $expiryDateTime
      */
     private function __construct(
-        UuidInterface $identifier,
-        UuidInterface $userIdentifier,
+        string $identifier,
+        ?string $userIdentifier,
         ClientEntityInterface $client,
         Collection $scopes,
         DateTime $expiryDateTime
@@ -61,14 +61,14 @@ class AccessToken implements AccessTokenEntityInterface
         $this->identifier = $identifier;
     }
 
-    public static function new(ClientEntityInterface $client, Collection $scopes, UuidInterface $userId): self
+    public static function new(ClientEntityInterface $client, Collection $scopes, ?UuidInterface $userId): self
     {
         return new self(
-            Uuid::uuid4(),
-            $userId,
+            (string) Uuid::uuid4(),
+            (string) $userId,
             $client,
             $scopes,
-            new DateTime() // @TODO: Add a TTL as an argument
+            new DateTime()
         );
     }
 
@@ -89,19 +89,19 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * @return string|int
+     * @return string|int|null
      */
     public function getUserIdentifier()
     {
-        return $this->userIdentifier->toString();
+        return $this->userIdentifier;
     }
 
     /**
-     * @return Collection|ScopeEntityInterface[]
+     * @return ScopeEntityInterface[]
      */
-    public function getScopes(): Collection
+    public function getScopes(): array
     {
-        return $this->scopes;
+        return $this->scopes->toArray();
     }
 
     /**
@@ -111,7 +111,7 @@ class AccessToken implements AccessTokenEntityInterface
      */
     public function getIdentifier(): string
     {
-        return $this->identifier->toString();
+        return $this->identifier;
     }
 
     /**
@@ -121,7 +121,7 @@ class AccessToken implements AccessTokenEntityInterface
      */
     public function setIdentifier($identifier): void
     {
-        $this->identifier = Uuid::fromString($identifier);
+        $this->identifier = $identifier;
     }
 
     /**
@@ -137,11 +137,11 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * Set the identifier of the user associated with the token.
      *
-     * @param string $identifier The identifier of the user
+     * @param string|null $identifier The identifier of the user
      */
     public function setUserIdentifier($identifier): void
     {
-        $this->userIdentifier = Uuid::fromString($identifier);
+        $this->userIdentifier = $identifier;
     }
 
     /**
