@@ -35,7 +35,7 @@ class AuthCode implements AuthCodeEntityInterface
     private $scopes;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $userIdentifier;
 
@@ -64,9 +64,9 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUserIdentifier(): string
+    public function getUserIdentifier(): ?string
     {
         return $this->userIdentifier;
     }
@@ -92,7 +92,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * Set the identifier of the user associated with the token.
      *
-     * @param string $identifier The identifier of the user
+     * @param string|null $identifier The identifier of the user
      */
     public function setUserIdentifier($identifier): void
     {
