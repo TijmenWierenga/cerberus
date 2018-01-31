@@ -21,9 +21,9 @@ class InMemoryAuthCodeRepository implements AuthCodeRepositoryInterface
 
     /**
      * InMemoryAuthCodeRepository constructor.
-     * @param Collection $collection
+     * @param Collection|null $collection
      */
-    public function __construct(Collection $collection)
+    public function __construct(Collection $collection = null)
     {
         $this->collection = $collection ?? new ArrayCollection();
     }
