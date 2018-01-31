@@ -16,7 +16,7 @@ class Scope implements ScopeEntityInterface
 
     /**
      * Scope constructor.
-     * @param $id
+     * @param string $id
      */
     public function __construct(string $id)
     {
@@ -30,7 +30,7 @@ class Scope implements ScopeEntityInterface
      */
     public function getIdentifier(): string
     {
-        return (string) $this->id;
+        return $this->id;
     }
 
     /**
@@ -40,7 +40,7 @@ class Scope implements ScopeEntityInterface
      * which is a value of any type other than a resource.
      * @since 5.4.0
      */
-    public function jsonSerialize(): string
+    public function jsonSerialize()
     {
         return $this->id;
     }
