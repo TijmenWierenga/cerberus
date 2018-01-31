@@ -8,13 +8,14 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPStan\Testing\TestCase;
 use Ramsey\Uuid\Uuid;
 use TijmenWierenga\Cerberus\AccessToken;
+use TijmenWierenga\Cerberus\Scope;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
  */
 class AccessTokenTest extends TestCase
 {
-    public function testItInstantiatesAnAccessToken()
+    public function testItInstantiatesAnAccessToken(): AccessTokenEntityInterface
     {
         $client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
         $scopes = new ArrayCollection();
@@ -24,5 +25,19 @@ class AccessTokenTest extends TestCase
         $this->assertInstanceOf(AccessTokenEntityInterface::class, $token);
         $this->assertEquals((string) $userId, $token->getUserIdentifier());
         $this->assertEquals($client, $token->getClient());
+
+        return $token;
+    }
+
+    /**
+     * @param AccessTokenEntityInterface $token
+     * @depends testItInstantiatesAnAccessToken
+     */
+    public function testItAddsAScopeToAnAccessToken(AccessTokenEntityInterface $token)
+    {
+        $scope = new Scope("my-scope");
+        $token->addScope($scope);
+
+        $this->assertContains($scope, $token->getScopes());
     }
 }
