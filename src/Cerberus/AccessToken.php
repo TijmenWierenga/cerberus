@@ -65,7 +65,7 @@ class AccessToken implements AccessTokenEntityInterface
     {
         return new self(
             (string) Uuid::uuid4(),
-            (string) $userId,
+            $userId ? $userId->toString() : null,
             $client,
             $scopes,
             new DateTime()
