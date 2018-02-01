@@ -22,23 +22,29 @@ class Client implements ClientEntityInterface
      * @var string[]
      */
     private $redirectUri;
+    /**
+     * @var string
+     */
+    private $clientSecret;
 
     /**
      * Client constructor.
      * @param UuidInterface $id
      * @param string $name
+     * @param string $clientSecret
      * @param string[] $redirectUri
      */
-    private function __construct(UuidInterface $id, string $name, array $redirectUri)
+    private function __construct(UuidInterface $id, string $name, string $clientSecret, array $redirectUri)
     {
         $this->id = $id;
         $this->name = $name;
         $this->redirectUri = $redirectUri;
+        $this->clientSecret = $clientSecret;
     }
 
-    public static function new(UuidInterface $id, string $name, string ...$redirectUri): self
+    public static function new(UuidInterface $id, string $name, string $clientSecret, string ...$redirectUri): self
     {
-        return new self($id, $name, $redirectUri);
+        return new self($id, $name, $clientSecret, $redirectUri);
     }
 
     /**
@@ -71,5 +77,26 @@ class Client implements ClientEntityInterface
     public function getRedirectUri(): array
     {
         return $this->redirectUri;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientSecret(): string
+    {
+        return $this->clientSecret;
+    }
+
+    /**
+     * @param string $clientSecret
+     */
+    public function setClientSecret(string $clientSecret): void
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    public function validateSecret(?string $against): bool
+    {
+        return $this->clientSecret === $against;
     }
 }
