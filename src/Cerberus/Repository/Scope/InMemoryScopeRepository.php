@@ -32,9 +32,9 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
      *
      * @param string $identifier The scope identifier
      *
-     * @return ScopeEntityInterface
+     * @return ScopeEntityInterface|false
      */
-    public function getScopeEntityByIdentifier($identifier): ScopeEntityInterface
+    public function getScopeEntityByIdentifier($identifier)
     {
         $result = $this->collection->filter(function (ScopeEntityInterface $scope) use ($identifier) {
             return $scope->getIdentifier() === $identifier;
