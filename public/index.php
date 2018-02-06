@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ramsey\Uuid\Uuid;
 use Slim\App;
+use TijmenWierenga\Cerberus\Client;
 use TijmenWierenga\Cerberus\Repository\AccessToken\InMemoryAccessTokenRepository;
 use TijmenWierenga\Cerberus\Repository\Client\InMemoryClientRepository;
 use TijmenWierenga\Cerberus\Repository\Scope\InMemoryScopeRepository;
@@ -20,7 +21,7 @@ $container = new \Slim\Container();
 
 $container["clientRepository"] = function (ContainerInterface $container) {
     $clients = new ArrayCollection([
-        \TijmenWierenga\Cerberus\Client::new(
+        Client::new(
             Uuid::fromString("bd523631-0b91-49e6-a099-137a647e1dee"),
             "tijmen",
             "super-secret-key",
