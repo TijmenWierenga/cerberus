@@ -31,8 +31,9 @@ class ClientCredentialsTest extends TestCase
     {
         $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', 'https://www.test.me');
         $scope = new Scope("test");
+        $scope2 = new Scope("god");
         $clientRepository = new InMemoryClientRepository(new ArrayCollection([$client]));
-        $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope]));
+        $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $privateKey = new CryptKey(__DIR__ . '/../../keys/private.key');
         $server = new AuthorizationServer(
@@ -49,7 +50,7 @@ class ClientCredentialsTest extends TestCase
                 "grant_type" => "client_credentials",
                 "client_id" => $client->getIdentifier(),
                 "client_secret" => "12345678",
-                "scope" => "test"
+                "scope" => "test god"
             ]);
         $response = new Response();
 
@@ -69,5 +70,6 @@ class ClientCredentialsTest extends TestCase
 
         $this->assertEquals($client->getIdentifier(), $request->getAttribute('oauth_client_id'));
         $this->assertContains("test", $request->getAttribute('oauth_scopes'));
+        $this->assertContains("god", $request->getAttribute('oauth_scopes'));
     }
 }
