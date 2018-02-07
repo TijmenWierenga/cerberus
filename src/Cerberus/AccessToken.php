@@ -61,11 +61,11 @@ class AccessToken implements AccessTokenEntityInterface
         $this->identifier = $identifier;
     }
 
-    public static function new(ClientEntityInterface $client, Collection $scopes, ?UuidInterface $userId): self
+    public static function new(ClientEntityInterface $client, Collection $scopes, ?string $userId): self
     {
         return new self(
             (string) Uuid::uuid4(),
-            $userId ? $userId->toString() : null,
+            $userId,
             $client,
             $scopes,
             new DateTime()
