@@ -4,6 +4,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Grant\PasswordGrant;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -12,8 +13,11 @@ use Slim\App;
 use TijmenWierenga\Cerberus\Client;
 use TijmenWierenga\Cerberus\Repository\AccessToken\InMemoryAccessTokenRepository;
 use TijmenWierenga\Cerberus\Repository\Client\InMemoryClientRepository;
+use TijmenWierenga\Cerberus\Repository\RefreshToken\InMemoryRefreshTokenRepository;
 use TijmenWierenga\Cerberus\Repository\Scope\InMemoryScopeRepository;
+use TijmenWierenga\Cerberus\Repository\User\InMemoryUserRepository;
 use TijmenWierenga\Cerberus\Scope;
+use TijmenWierenga\Cerberus\User;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -42,6 +46,16 @@ $container["scopeRepository"] = function (ContainerInterface $container) {
     return new InMemoryScopeRepository($scopes);
 };
 
+$container["userRepository"] = function (ContainerInterface $container) {
+    $user = User::new(Uuid::uuid4(), 'tijmen', 'password');
+
+    return new InMemoryUserRepository(new ArrayCollection([$user]));
+};
+
+$container["refreshTokenRepository"] = function (ContainerInterface $container) {
+    return new InMemoryRefreshTokenRepository();
+};
+
 $container["privateKey"] = function (ContainerInterface $container) {
     return new \League\OAuth2\Server\CryptKey(__DIR__ . "/../keys/private.key");
 };
@@ -60,6 +74,10 @@ $container["oauthServer"] = function (ContainerInterface $container) {
     );
 
     $server->enableGrantType(new ClientCredentialsGrant());
+    $server->enableGrantType(new PasswordGrant(
+        $container->get('userRepository'),
+        $container->get('refreshTokenRepository')
+    ));
 
     return $server;
 };
