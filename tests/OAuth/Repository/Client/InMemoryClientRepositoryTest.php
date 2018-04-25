@@ -1,12 +1,12 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus\Repository;
+namespace Cerberus\Tests\Oauth\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Client;
-use TijmenWierenga\Cerberus\Repository\Client\InMemoryClientRepository;
+use Cerberus\Oauth\Client;
+use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

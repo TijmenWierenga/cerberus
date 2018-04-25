@@ -1,6 +1,6 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus;
+namespace Cerberus\Tests\Oauth;
 
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,14 +10,14 @@ use League\OAuth2\Server\Grant\ClientCredentialsGrant;
 use League\OAuth2\Server\Grant\PasswordGrant;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Client;
-use TijmenWierenga\Cerberus\Repository\AccessToken\InMemoryAccessTokenRepository;
-use TijmenWierenga\Cerberus\Repository\Client\InMemoryClientRepository;
-use TijmenWierenga\Cerberus\Repository\RefreshToken\InMemoryRefreshTokenRepository;
-use TijmenWierenga\Cerberus\Repository\Scope\InMemoryScopeRepository;
-use TijmenWierenga\Cerberus\Repository\User\InMemoryUserRepository;
-use TijmenWierenga\Cerberus\Scope;
-use TijmenWierenga\Cerberus\User;
+use Cerberus\Oauth\Client;
+use Cerberus\Oauth\Repository\AccessToken\InMemoryAccessTokenRepository;
+use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
+use Cerberus\Oauth\Repository\RefreshToken\InMemoryRefreshTokenRepository;
+use Cerberus\Oauth\Repository\Scope\InMemoryScopeRepository;
+use Cerberus\Oauth\Repository\User\InMemoryUserRepository;
+use Cerberus\Oauth\Scope;
+use Cerberus\Oauth\User;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\ServerRequest;
 

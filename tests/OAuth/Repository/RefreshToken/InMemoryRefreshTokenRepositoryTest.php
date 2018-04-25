@@ -1,13 +1,13 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus\Repository\RefreshToken;
+namespace Cerberus\Tests\Oauth\Repository\RefreshToken;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\RefreshToken;
-use TijmenWierenga\Cerberus\Repository\RefreshToken\InMemoryRefreshTokenRepository;
+use Cerberus\Oauth\RefreshToken;
+use Cerberus\Oauth\Repository\RefreshToken\InMemoryRefreshTokenRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

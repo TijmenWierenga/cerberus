@@ -1,11 +1,11 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus\Repository\Scope;
+namespace Cerberus\Tests\Oauth\Repository\Scope;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use TijmenWierenga\Cerberus\Repository\Scope\InMemoryScopeRepository;
-use TijmenWierenga\Cerberus\Scope;
+use Cerberus\Oauth\Repository\Scope\InMemoryScopeRepository;
+use Cerberus\Oauth\Scope;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

@@ -1,11 +1,11 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus\Repository\AuthCode;
+namespace Cerberus\Tests\Oauth\Repository\AuthCode;
 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Repository\AuthCode\InMemoryAuthCodeRepository;
+use Cerberus\Oauth\Repository\AuthCode\InMemoryAuthCodeRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

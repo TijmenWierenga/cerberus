@@ -1,11 +1,11 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus;
+namespace Cerberus\Tests\Oauth;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Client;
+use Cerberus\Oauth\Client;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

@@ -1,13 +1,13 @@
 <?php
 
-namespace TijmenWierenga\Cerberus\Repository\AuthCode;
+namespace Cerberus\Oauth\Repository\AuthCode;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
-use TijmenWierenga\Cerberus\AuthCode;
+use Cerberus\Oauth\AuthCode;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

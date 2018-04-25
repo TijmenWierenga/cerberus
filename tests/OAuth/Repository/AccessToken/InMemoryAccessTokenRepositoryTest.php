@@ -1,5 +1,5 @@
 <?php
-namespace TijmenWierenga\Tests\Cerberus\Repository\AccessToken;
+namespace Cerberus\Tests\Oauth\Repository\AccessToken;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -7,7 +7,7 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Repository\AccessToken\InMemoryAccessTokenRepository;
+use Cerberus\Oauth\Repository\AccessToken\InMemoryAccessTokenRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

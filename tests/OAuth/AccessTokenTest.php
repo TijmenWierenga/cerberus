@@ -1,14 +1,14 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus;
+namespace Cerberus\Tests\Oauth;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPStan\Testing\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\AccessToken;
-use TijmenWierenga\Cerberus\Scope;
+use Cerberus\Oauth\AccessToken;
+use Cerberus\Oauth\Scope;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

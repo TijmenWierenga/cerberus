@@ -1,5 +1,5 @@
 <?php
-namespace TijmenWierenga\Cerberus\Repository\AccessToken;
+namespace Cerberus\Oauth\Repository\AccessToken;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -8,7 +8,7 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use TijmenWierenga\Cerberus\AccessToken;
+use Cerberus\Oauth\AccessToken;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

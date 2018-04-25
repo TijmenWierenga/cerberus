@@ -1,13 +1,13 @@
 <?php
 
-namespace TijmenWierenga\Tests\Cerberus\Repository\User;
+namespace Cerberus\Tests\Oauth\Repository\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use TijmenWierenga\Cerberus\Repository\User\InMemoryUserRepository;
-use TijmenWierenga\Cerberus\User;
+use Cerberus\Oauth\Repository\User\InMemoryUserRepository;
+use Cerberus\Oauth\User;
 
 class InMemoryUserRepositoryTest extends TestCase
 {

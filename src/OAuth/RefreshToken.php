@@ -1,6 +1,6 @@
 <?php
 
-namespace TijmenWierenga\Cerberus;
+namespace Cerberus\Oauth;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\Traits\EntityTrait;

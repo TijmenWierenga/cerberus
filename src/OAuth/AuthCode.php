@@ -1,6 +1,6 @@
 <?php
 
-namespace TijmenWierenga\Cerberus;
+namespace Cerberus\Oauth;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
