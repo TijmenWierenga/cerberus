@@ -1,0 +1,3 @@
+index:
+    path: /
+    controller: Cerberus\Controller\OauthController::index
