@@ -1,4 +1,6 @@
 {
+    "name": "tijmen-wierenga/cerberus",
+    "description": "Full authentication and authorization with OAuth2",
     "type": "project",
     "license": "proprietary",
     "require": {
