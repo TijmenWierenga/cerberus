@@ -38,6 +38,7 @@ services:
 
     League\OAuth2\Server\Grant\ClientCredentialsGrant: ~
     League\OAuth2\Server\Grant\PasswordGrant: ~
+    League\OAuth2\Server\Grant\RefreshTokenGrant: ~
 
     League\OAuth2\Server\AuthorizationServer:
         arguments:
@@ -53,3 +54,6 @@ services:
             - method: enableGrantType
               arguments:
                 - '@League\OAuth2\Server\Grant\PasswordGrant'
+            - method: enableGrantType
+              arguments:
+                - '@League\OAuth2\Server\Grant\RefreshTokenGrant'
