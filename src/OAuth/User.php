@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Oauth;
+namespace Cerberus\OAuth;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Ramsey\Uuid\UuidInterface;

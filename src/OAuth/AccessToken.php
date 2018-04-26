@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Oauth;
+namespace Cerberus\OAuth;
 
 use DateTime;
 use Doctrine\Common\Collections\Collection;

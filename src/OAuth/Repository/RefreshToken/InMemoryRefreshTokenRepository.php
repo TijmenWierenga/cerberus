@@ -1,13 +1,13 @@
 <?php
 
-namespace Cerberus\Oauth\Repository\RefreshToken;
+namespace Cerberus\OAuth\Repository\RefreshToken;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use Cerberus\Oauth\RefreshToken;
+use Cerberus\OAuth\RefreshToken;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

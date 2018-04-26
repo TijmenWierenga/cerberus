@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Oauth\Repository\Scope;
+namespace Cerberus\OAuth\Repository\Scope;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

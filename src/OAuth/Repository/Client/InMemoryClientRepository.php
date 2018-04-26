@@ -1,13 +1,11 @@
 <?php
+namespace Cerberus\OAuth\Repository\Client;
 
-namespace Cerberus\Oauth\Repository\Client;
-
+use Cerberus\OAuth\Client;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Cerberus\Oauth\Client;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

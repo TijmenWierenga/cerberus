@@ -1,13 +1,13 @@
 <?php
 
-namespace Cerberus\Oauth\Repository\User;
+namespace Cerberus\OAuth\Repository\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use Cerberus\Oauth\User;
+use Cerberus\OAuth\User;
 
 class InMemoryUserRepository implements UserRepositoryInterface
 {
