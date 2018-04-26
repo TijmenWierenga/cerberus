@@ -1,6 +1,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    privateKey: '%kernel.project_dir%/keys/private.key'
 
 services:
     # default configuration for services in *this* file
@@ -15,7 +16,10 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Cerberus\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,OAuth}'
+
+    Cerberus\OAuth\Repository\:
+        resource: '../src/OAuth/Repository/*'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -25,3 +29,31 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\InMemoryClientRepository'
+    League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface: '@Cerberus\OAuth\Repository\AccessToken\InMemoryAccessTokenRepository'
+    League\OAuth2\Server\Repositories\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\InMemoryScopeRepository'
+    League\OAuth2\Server\Repositories\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\InMemoryUserRepository'
+    League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface: '@Cerberus\OAuth\Repository\RefreshToken\InMemoryRefreshTokenRepository'
+
+    League\OAuth2\Server\Grant\ClientCredentialsGrant: ~
+    League\OAuth2\Server\Grant\PasswordGrant: ~
+    League\OAuth2\Server\Grant\RefreshTokenGrant: ~
+
+    League\OAuth2\Server\AuthorizationServer:
+        arguments:
+            - '@League\OAuth2\Server\Repositories\ClientRepositoryInterface'
+            - '@League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface'
+            - '@League\OAuth2\Server\Repositories\ScopeRepositoryInterface'
+            - '%privateKey%'
+            - '%env(APP_SECRET)%'
+        calls:
+            - method: enableGrantType
+              arguments:
+                - '@League\OAuth2\Server\Grant\ClientCredentialsGrant'
+            - method: enableGrantType
+              arguments:
+                - '@League\OAuth2\Server\Grant\PasswordGrant'
+            - method: enableGrantType
+              arguments:
+                - '@League\OAuth2\Server\Grant\RefreshTokenGrant'
