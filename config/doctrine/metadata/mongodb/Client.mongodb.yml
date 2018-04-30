@@ -1,0 +1,11 @@
+Cerberus\OAuth\Client:
+  fields:
+    id:
+      id: true
+      strategy: none
+    name:
+      type: string
+    clientSecret:
+      type: string
+    redirectUri:
+      type: collection
