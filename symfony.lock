@@ -23,8 +23,26 @@
     "doctrine/inflector": {
         "version": "v1.3.0"
     },
+    "doctrine/instantiator": {
+        "version": "1.1.0"
+    },
     "doctrine/lexer": {
         "version": "v1.0.1"
+    },
+    "doctrine/mongodb": {
+        "version": "1.6.2"
+    },
+    "doctrine/mongodb-odm": {
+        "version": "1.2.3"
+    },
+    "doctrine/mongodb-odm-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "e1ee362a520ff9e3e7c38fb5399499427ed91314"
+        }
     },
     "jean85/pretty-package-versions": {
         "version": "1.1"
@@ -125,6 +143,9 @@
     "symfony/dependency-injection": {
         "version": "v4.0.8"
     },
+    "symfony/doctrine-bridge": {
+        "version": "v4.0.8"
+    },
     "symfony/dotenv": {
         "version": "v4.0.8"
     },
@@ -163,6 +184,9 @@
     },
     "symfony/lts": {
         "version": "4-dev"
+    },
+    "symfony/options-resolver": {
+        "version": "v4.0.8"
     },
     "symfony/phpunit-bridge": {
         "version": "3.3",
