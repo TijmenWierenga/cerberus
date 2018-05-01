@@ -2,11 +2,11 @@
 
 namespace Cerberus\Tests\Oauth\Repository;
 
+use Cerberus\Oauth\Client;
+use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\Client;
-use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
@@ -51,5 +51,20 @@ class InMemoryClientRepositoryTest extends TestCase
         );
 
         $this->assertNull($result);
+    }
+
+    public function testItStoresANewClient()
+    {
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
+        $repo = new InMemoryClientRepository(new ArrayCollection([]));
+
+        $repo->save($client);
+
+        $this->assertEquals($client, $repo->getClientEntity(
+            $client->getIdentifier(),
+            'password_grant',
+            $client->getClientSecret(),
+            false
+        ));
     }
 }

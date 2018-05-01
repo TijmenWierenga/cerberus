@@ -2,10 +2,10 @@
 namespace Cerberus\OAuth\Repository\Client;
 
 use Cerberus\OAuth\Client;
+use Cerberus\OAuth\Exception\UniqueEntityException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
@@ -55,6 +55,16 @@ class InMemoryClientRepository implements ClientRepositoryInterface
         }
 
         return $client;
+    }
+
+    /**
+     * Saves a new Client to the database
+     *
+     * @param Client $client
+     */
+    public function save(Client $client): void
+    {
+        $this->collection->add($client);
     }
 
     private function getClient(string $id): ?Client
