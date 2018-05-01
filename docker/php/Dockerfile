@@ -1,6 +1,10 @@
 FROM php:7.2
 LABEL maintainer="t.wierenga@live.nl"
 
+ARG USER_ID=502
+
+RUN usermod -u ${USER_ID} www-data
+
 RUN apt-get update \
     && apt-get install -y \
         zlib1g-dev \
