@@ -2,7 +2,9 @@ version: '3.3'
 
 services:
   server:
-    image: php:7.2-alpine
+    image: cerberus/php:7.2
+    build:
+      context: ./docker/php
     ports:
       - 8080:8080
     volumes:
