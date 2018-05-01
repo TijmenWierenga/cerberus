@@ -1,5 +1,6 @@
-init: keys create_docker_volumes server
-create_docker_volumes:
+init: keys build server
+build:
+	UID=$$(id -u) docker-compose build
 	docker volume create --driver local mongo-data
 keys:
 	mkdir keys
@@ -9,7 +10,7 @@ keys:
 server:
 	docker-compose up -d
 test:
-	docker run -it --rm -v $$(pwd):/app -w /app php:7.2-alpine bin/phpunit
+	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 bin/phpunit
 
-.SILENT: keys server test init create_docker_volumes
+.SILENT: keys server test init build
 .PHONY: server test
