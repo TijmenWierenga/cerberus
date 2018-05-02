@@ -2,9 +2,9 @@
 namespace Cerberus\Controller;
 
 use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response;
 
 class OAuthController
 {
@@ -22,13 +22,11 @@ class OAuthController
         $this->server = $server;
     }
 
-    public function accessTokenRequest(ServerRequestInterface $request): ResponseInterface
+    public function accessTokenRequest(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $response = new Response();
-
         try {
             return $this->server->respondToAccessTokenRequest($request, $response);
-        } catch (\League\OAuth2\Server\Exception\OAuthServerException $exception) {
+        } catch (OAuthServerException $exception) {
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
             // TODO: Handle other failures
