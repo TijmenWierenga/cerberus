@@ -30,7 +30,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\InMemoryClientRepository'
+    League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
     League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface: '@Cerberus\OAuth\Repository\AccessToken\InMemoryAccessTokenRepository'
     League\OAuth2\Server\Repositories\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\InMemoryScopeRepository'
     League\OAuth2\Server\Repositories\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\InMemoryUserRepository'
@@ -57,3 +57,6 @@ services:
             - method: enableGrantType
               arguments:
                 - '@League\OAuth2\Server\Grant\RefreshTokenGrant'
+
+    Zend\Diactoros\Response: ~
+    Psr\Http\Message\ResponseInterface: '@Zend\Diactoros\Response'
