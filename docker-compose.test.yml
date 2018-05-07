@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
-    command: ["bin/phpunit"]
+    command: ["bin/phpunit", "--testsuite", "functional"]
 
   mongo:
     image: mongo:3
