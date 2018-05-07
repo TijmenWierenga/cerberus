@@ -3,6 +3,7 @@ Cerberus\OAuth\Client:
     id:
       id: true
       strategy: none
+      type: uuid
     name:
       type: string
     clientSecret:

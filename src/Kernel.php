@@ -2,6 +2,8 @@
 
 namespace Cerberus;
 
+use Cerberus\Infrastructure\Doctrine\Types\UuidType;
+use Doctrine\ODM\MongoDB\Types\Type;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -23,6 +25,13 @@ class Kernel extends BaseKernel
     public function getLogDir()
     {
         return $this->getProjectDir().'/var/log';
+    }
+
+    public function boot()
+    {
+        parent::boot();
+
+        $this->registerDoctrineTypes();
     }
 
     public function registerBundles()
@@ -57,5 +66,10 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+    }
+
+    private function registerDoctrineTypes(): void
+    {
+        Type::addType('uuid', UuidType::class);
     }
 }
