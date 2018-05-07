@@ -37,10 +37,11 @@ class MongoClientRepository implements ClientRepositoryInterface
      * @param bool $mustValidateSecret If true the client must attempt to validate the secret if the client
      *                                        is confidential
      *
-     * @return ClientEntityInterface
+     * @return ClientEntityInterface|null
      */
     public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true)
     {
+        /** @var ClientEntityInterface|null $client */
         $client = $this->repository->find($clientIdentifier);
 
         if (! $client) {
