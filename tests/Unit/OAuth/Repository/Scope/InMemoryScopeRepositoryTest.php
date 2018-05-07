@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Tests\Oauth\Repository\Scope;
+namespace Cerberus\Tests\Unit\OAuth\Repository\Scope;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;

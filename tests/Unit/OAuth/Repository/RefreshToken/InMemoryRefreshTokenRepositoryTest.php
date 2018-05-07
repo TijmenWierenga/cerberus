@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Tests\Oauth\Repository\RefreshToken;
+namespace Cerberus\Tests\Unit\OAuth\Repository\RefreshToken;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;

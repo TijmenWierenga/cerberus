@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Tests\Oauth\Repository;
+namespace Cerberus\Tests\Unit\OAuth\Repository;
 
 use Cerberus\Oauth\Client;
 use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;

@@ -1,5 +1,5 @@
 <?php
-namespace Cerberus\Tests\Oauth\Repository\AccessToken;
+namespace Cerberus\Tests\Unit\OAuth\Repository\AccessToken;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;

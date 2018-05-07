@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Tests\Oauth;
+namespace Cerberus\Tests\Unit\OAuth;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\Tests\Oauth\Repository\User;
+namespace Cerberus\Tests\Unit\OAuth\Repository\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
