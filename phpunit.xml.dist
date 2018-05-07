@@ -9,7 +9,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <env name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="KERNEL_CLASS" value="Cerberus\Kernel" />
         <env name="APP_ENV" value="test" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />
@@ -23,8 +23,14 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="project">
             <directory>tests/</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>tests/Functional/</directory>
         </testsuite>
     </testsuites>
 
