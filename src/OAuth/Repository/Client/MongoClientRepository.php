@@ -41,7 +41,17 @@ class MongoClientRepository implements ClientRepositoryInterface
      */
     public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true)
     {
-        return $this->repository->find($clientIdentifier);
+        $client = $this->repository->find($clientIdentifier);
+
+        if (! $client) {
+            return null;
+        }
+
+        if ($mustValidateSecret) {
+            // Validate credentials
+        }
+
+        return $client;
     }
 
     /**
