@@ -9,20 +9,43 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class MongoClientRepositoryTest extends KernelTestCase
 {
-    public function testItCreatesAClient()
+    /**
+     * @var MongoClientRepository
+     */
+    private $repository;
+
+    public function setUp()
     {
         self::bootKernel();
-        /** @var MongoClientRepository $repository */
-        $repository = self::$kernel->getContainer()->get('test.'.MongoClientRepository::class);
+        $this->repository = self::$kernel->getContainer()->get('test.'.MongoClientRepository::class);
+    }
+
+    public function testItCreatesAClient(): Client
+    {
         $client = Client::new(Uuid::uuid4(), 'test-client', 'a-secret');
 
-        $repository->save($client);
+        $this->repository->save($client);
 
-        $this->assertEquals($client, $repository->getClientEntity(
+        $this->assertEquals($client, $this->repository->getClientEntity(
             $client->getIdentifier(),
             'password',
             null,
             false
+        ));
+
+        return $client;
+    }
+
+    /**
+     * @depends testItCreatesAClient
+     */
+    public function testItFindsAClientAndValidatesCredentials(Client $client)
+    {
+        $this->assertEquals($client, $this->repository->getClientEntity(
+            $client->getIdentifier(),
+            'password',
+            'a-secret',
+            true
         ));
     }
 }
