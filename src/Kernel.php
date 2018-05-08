@@ -70,6 +70,8 @@ class Kernel extends BaseKernel
 
     private function registerDoctrineTypes(): void
     {
-        Type::addType('uuid', UuidType::class);
+        if (! Type::hasType('uuid')) {
+            Type::addType('uuid', UuidType::class);
+        }
     }
 }
