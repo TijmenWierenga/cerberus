@@ -2,10 +2,11 @@
 
 namespace Cerberus\OAuth\Repository\Client;
 
+use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 class MongoClientRepository implements ClientRepositoryInterface
 {
@@ -17,15 +18,21 @@ class MongoClientRepository implements ClientRepositoryInterface
      * @var DocumentManager
      */
     private $manager;
+    /**
+     * @var HasherInterface
+     */
+    private $hasher;
 
     /**
      * MongoClientRepository constructor.
      * @param DocumentManager $manager
+     * @param HasherInterface $hasher
      */
-    public function __construct(DocumentManager $manager)
+    public function __construct(DocumentManager $manager, HasherInterface $hasher)
     {
         $this->repository = $manager->getRepository('Cerberus:Client');
         $this->manager = $manager;
+        $this->hasher = $hasher;
     }
 
     /**
@@ -37,11 +44,16 @@ class MongoClientRepository implements ClientRepositoryInterface
      * @param bool $mustValidateSecret If true the client must attempt to validate the secret if the client
      *                                        is confidential
      *
-     * @return ClientEntityInterface|null
+     * @return Client|null
      */
-    public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true)
+    public function getClientEntity(
+        $clientIdentifier,
+        $grantType,
+        $clientSecret = null,
+        $mustValidateSecret = true
+    ): ?Client
     {
-        /** @var ClientEntityInterface|null $client */
+        /** @var Client|null $client */
         $client = $this->repository->find($clientIdentifier);
 
         if (! $client) {
@@ -49,7 +61,13 @@ class MongoClientRepository implements ClientRepositoryInterface
         }
 
         if ($mustValidateSecret) {
-            // Validate credentials
+            if (! $clientSecret) {
+                throw OAuthServerException::invalidCredentials();
+            }
+
+            if (! $this->hasher->verify($clientSecret, $client->getClientSecret())) {
+                throw OAuthServerException::invalidCredentials();
+            }
         }
 
         return $client;
