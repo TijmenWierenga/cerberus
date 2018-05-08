@@ -2,6 +2,7 @@
 
 namespace TijmenWierengaCerberus;
 
+use Cerberus\Hasher\PlainTextHasher;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
@@ -32,7 +33,7 @@ class ClientCredentialsTest extends TestCase
         $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', 'https://www.test.me');
         $scope = new Scope("test");
         $scope2 = new Scope("god");
-        $clientRepository = new InMemoryClientRepository(new ArrayCollection([$client]));
+        $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
         $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $privateKey = new CryptKey(__DIR__ . '/../../../keys/private.key');

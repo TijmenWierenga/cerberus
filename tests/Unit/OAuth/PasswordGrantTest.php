@@ -2,6 +2,7 @@
 
 namespace Cerberus\Tests\Unit\OAuth;
 
+use Cerberus\Hasher\PlainTextHasher;
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\AuthorizationServer;
@@ -33,7 +34,7 @@ class PasswordGrantTest extends TestCase
         $scope = new Scope("test");
         $scope2 = new Scope("god");
         $user = User::new(Uuid::uuid4(), 'tijmen', 'password');
-        $clientRepository = new InMemoryClientRepository(new ArrayCollection([$client]));
+        $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
         $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $userRepository = new InMemoryUserRepository(new ArrayCollection([$user]));

@@ -2,6 +2,7 @@
 
 namespace Cerberus\Tests\Unit\OAuth\Repository;
 
+use Cerberus\Hasher\PlainTextHasher;
 use Cerberus\Oauth\Client;
 use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +17,7 @@ class InMemoryClientRepositoryTest extends TestCase
     public function testItReturnsAClientById()
     {
         $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
-        $repo = new InMemoryClientRepository(new ArrayCollection([$client]));
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity($client->getIdentifier(), 'client_credentials', null, false);
 
@@ -26,7 +27,7 @@ class InMemoryClientRepositoryTest extends TestCase
     public function testItReturnsAClientByIdAndClientSecret()
     {
         $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
-        $repo = new InMemoryClientRepository(new ArrayCollection([$client]));
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity(
             $client->getIdentifier(),
@@ -41,7 +42,7 @@ class InMemoryClientRepositoryTest extends TestCase
     public function testItReturnsNullIfSecretDoesNotMatch()
     {
         $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
-        $repo = new InMemoryClientRepository(new ArrayCollection([$client]));
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity(
             $client->getIdentifier(),
@@ -56,7 +57,7 @@ class InMemoryClientRepositoryTest extends TestCase
     public function testItStoresANewClient()
     {
         $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
-        $repo = new InMemoryClientRepository(new ArrayCollection([]));
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([]));
 
         $repo->save($client);
 
