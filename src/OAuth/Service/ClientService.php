@@ -3,7 +3,9 @@
 namespace Cerberus\OAuth\Service;
 
 use Cerberus\Hasher\HasherInterface;
+use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Repository\Client\ClientRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 
 class ClientService
 {
@@ -24,10 +26,18 @@ class ClientService
 
     public function create($request)
     {
-        // Instantiate
-        // Create random secret
-        // Hash secret
-        // Save Client
-        // Return Client + secret
+        // TODO: Create from request
+
+        $secret = base64_encode(random_bytes(32));
+        $hash = $this->hasher->hash($secret);
+        $client = Client::new(
+            Uuid::uuid4(),
+            'testing-client',
+            $hash
+        );
+
+        $this->clientRepository->save($client);
+
+        // TODO: Return Client + secret
     }
 }
