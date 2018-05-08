@@ -9,18 +9,18 @@ class ArgonPasswordHasher implements HasherInterface
      */
     private $options;
 
-    public function __construct(int $cost = 2)
+    public function __construct(int $cost = PASSWORD_ARGON2_DEFAULT_MEMORY_COST)
     {
         $this->options = [
             'memory_cost' => $cost,
-            'time_cost'   => 4,
-            'threads'     => 3,
+            'time_cost'   => PASSWORD_ARGON2_DEFAULT_TIME_COST,
+            'threads'     => PASSWORD_ARGON2_DEFAULT_THREADS,
         ];
     }
 
     public function hash(string $value): string
     {
-        return password_hash($value, PASSWORD_ARGON2I, $this->options);
+        return password_hash($value, PASSWORD_ARGON2I);
     }
 
     public function verify(string $value, string $hashedValue): bool
