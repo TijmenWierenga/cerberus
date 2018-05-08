@@ -59,7 +59,7 @@ class ClientCredentialsTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("Bearer", $body->token_type);
-        $this->assertEquals(1800, $body->expires_in);
+        $this->assertLessThanOrEqual(1800, $body->expires_in);
         $this->assertRegExp("/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/", $body->access_token);
 
         $accessToken = $body->access_token;
