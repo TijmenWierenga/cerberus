@@ -18,6 +18,11 @@ class MongoClientRepositoryTest extends KernelTestCase
 
         $repository->save($client);
 
-        $this->assertEquals($client, $repository->getClientEntity($client->getIdentifier(), 'password'));
+        $this->assertEquals($client, $repository->getClientEntity(
+            $client->getIdentifier(),
+            'password',
+            null,
+            false
+        ));
     }
 }
