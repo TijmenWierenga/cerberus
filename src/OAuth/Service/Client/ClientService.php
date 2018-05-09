@@ -1,6 +1,6 @@
 <?php
 
-namespace Cerberus\OAuth\Service;
+namespace Cerberus\OAuth\Service\Client;
 
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
@@ -18,26 +18,27 @@ class ClientService
      */
     private $hasher;
 
-    public function __construct(ClientRepositoryInterface $clientRepository, HasherInterface $hasher)
-    {
+    public function __construct(
+        ClientRepositoryInterface $clientRepository,
+        HasherInterface $hasher
+    ) {
         $this->clientRepository = $clientRepository;
         $this->hasher = $hasher;
     }
 
-    public function create($request)
+    public function create(CreateClientRequest $request): CreateClientResponse
     {
-        // TODO: Create from request
-
         $secret = base64_encode(random_bytes(32));
         $hash = $this->hasher->hash($secret);
         $client = Client::new(
             Uuid::uuid4(),
-            'testing-client',
-            $hash
+            $request->getName(),
+            $hash,
+            ...$request->getRedirectUris()
         );
 
         $this->clientRepository->save($client);
 
-        // TODO: Return Client + secret
+        return new CreateClientResponse($client, $secret);
     }
 }
