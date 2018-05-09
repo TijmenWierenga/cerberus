@@ -1,3 +1,9 @@
-index:
+access_token_request:
     path: /access-token
+    methods: [POST]
     controller: Cerberus\Controller\OAuthController::accessTokenRequest
+
+create_client:
+    path: /client
+    methods: [POST]
+    controller: Cerberus\Controller\ClientController::create
