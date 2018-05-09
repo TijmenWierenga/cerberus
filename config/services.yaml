@@ -32,11 +32,12 @@ services:
         tags: ['controller.service_arguments']
 
     Cerberus\Hasher\HasherInterface: '@Cerberus\Hasher\ArgonPasswordHasher'
+    Cerberus\OAuth\Repository\Client\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
+    League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\ClientRepositoryInterface'
     League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface: '@Cerberus\OAuth\Repository\AccessToken\InMemoryAccessTokenRepository'
     League\OAuth2\Server\Repositories\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\InMemoryScopeRepository'
     League\OAuth2\Server\Repositories\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\InMemoryUserRepository'
