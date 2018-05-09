@@ -21,6 +21,9 @@ services:
     Cerberus\OAuth\Repository\:
         resource: '../src/OAuth/Repository/*'
 
+    Cerberus\OAuth\Service\:
+        resource: '../src/OAuth/Service/*'
+
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     Cerberus\Controller\:
