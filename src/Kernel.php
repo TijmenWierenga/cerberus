@@ -3,11 +3,14 @@
 namespace Cerberus;
 
 use Cerberus\Infrastructure\Doctrine\Types\UuidType;
+use Cerberus\Security\Factory\OAuthFactory;
 use Doctrine\ODM\MongoDB\Types\Type;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -42,6 +45,15 @@ class Kernel extends BaseKernel
                 yield new $class();
             }
         }
+    }
+
+    protected function build(ContainerBuilder $container)
+    {
+        /** @var SecurityExtension $extension */
+        $extension = $container->getExtension('security');
+        $extension->addSecurityListenerFactory(new OAuthFactory());
+
+        parent::build($container);
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
