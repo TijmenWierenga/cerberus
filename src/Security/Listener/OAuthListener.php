@@ -5,6 +5,8 @@ namespace Cerberus\Security\Listener;
 use Cerberus\Security\Token\OAuthToken;
 use Cerberus\Security\Token\PreOAuthToken;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -35,17 +37,22 @@ class OAuthListener implements ListenerInterface
     {
         $request = $event->getRequest();
 
-        if (! $request->headers->has('Authorization')) {
-            return;
-        }
-
         try {
             $preToken = new PreOAuthToken((new DiactorosFactory())->createRequest($request));
+            $this->tokenStorage->setToken($preToken);
             $token = $this->authenticationManager->authenticate($preToken);
 
             $this->tokenStorage->setToken($token);
+            return;
         } catch (AuthenticationException $e) {
-            $this->tokenStorage->setToken(null);
+            if ($this->tokenStorage->getToken() instanceof PreOAuthToken ||
+                $this->tokenStorage->getToken() instanceof OAuthToken) {
+                $this->tokenStorage->setToken(null);
+            }
+
+            $response = new JsonResponse(["message" => $e->getMessage()]);
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
+            $event->setResponse($response);
         }
     }
 }
