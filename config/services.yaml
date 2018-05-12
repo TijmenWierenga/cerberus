@@ -2,6 +2,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     privateKey: '%kernel.project_dir%/keys/private.key'
+    publicKey: '%kernel.project_dir%/keys/public.key'
     locale: 'en'
 
 services:
@@ -17,7 +18,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     Cerberus\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,OAuth}'
+        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,OAuth,Security}'
 
     Cerberus\OAuth\Repository\:
         resource: '../src/OAuth/Repository/*'
@@ -33,6 +34,14 @@ services:
 
     Cerberus\Hasher\HasherInterface: '@Cerberus\Hasher\ArgonPasswordHasher'
     Cerberus\OAuth\Repository\Client\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
+
+    Cerberus\Security\Listener\OAuthListener:
+        arguments:
+            - '@security.token_storage'
+            - '@security.authentication.manager'
+
+    Cerberus\Security\Provider\OAuthProvider: ~
+    Cerberus\Security\Handler\AccessDeniedHandler: ~
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -64,6 +73,11 @@ services:
             - method: enableGrantType
               arguments:
                 - '@League\OAuth2\Server\Grant\RefreshTokenGrant'
+
+    League\OAuth2\Server\ResourceServer:
+        arguments:
+            - '@League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface'
+            - '%publicKey%'
 
     Zend\Diactoros\Response: ~
     Psr\Http\Message\ResponseInterface: '@Zend\Diactoros\Response'
