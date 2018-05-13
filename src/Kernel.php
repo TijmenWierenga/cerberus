@@ -2,10 +2,15 @@
 
 namespace Cerberus;
 
+use Cerberus\Infrastructure\Doctrine\Types\UuidType;
+use Cerberus\Security\Factory\OAuthFactory;
+use Doctrine\ODM\MongoDB\Types\Type;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -25,6 +30,13 @@ class Kernel extends BaseKernel
         return $this->getProjectDir().'/var/log';
     }
 
+    public function boot()
+    {
+        parent::boot();
+
+        $this->registerDoctrineTypes();
+    }
+
     public function registerBundles()
     {
         $contents = require $this->getProjectDir().'/config/bundles.php';
@@ -33,6 +45,15 @@ class Kernel extends BaseKernel
                 yield new $class();
             }
         }
+    }
+
+    protected function build(ContainerBuilder $container)
+    {
+        /** @var SecurityExtension $extension */
+        $extension = $container->getExtension('security');
+        $extension->addSecurityListenerFactory(new OAuthFactory());
+
+        parent::build($container);
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
@@ -57,5 +78,12 @@ class Kernel extends BaseKernel
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
+    }
+
+    private function registerDoctrineTypes(): void
+    {
+        if (! Type::hasType('uuid')) {
+            Type::addType('uuid', UuidType::class);
+        }
     }
 }

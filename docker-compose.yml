@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  server:
+    image: cerberus/php:7.2
+    build:
+      context: ./docker/php
+      args:
+        - USER_ID=${UID}
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/var/www/html
+    command: ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html/public"]
+
+  mongo:
+    image: mongo:3
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    external: true

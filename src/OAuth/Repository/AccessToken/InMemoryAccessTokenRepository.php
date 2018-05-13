@@ -15,15 +15,24 @@ use Cerberus\OAuth\AccessToken;
  */
 class InMemoryAccessTokenRepository implements AccessTokenRepositoryInterface
 {
+    /**
+     * @var Collection
+     */
     private $collection;
+
+    /**
+     * @var Collection
+     */
+    private $blacklist;
 
     /**
      * InMemoryAccessTokenRepository constructor.
      * @param Collection|null $collection
      */
-    public function __construct(Collection $collection = null)
+    public function __construct(Collection $collection = null, Collection $blacklist = null)
     {
         $this->collection = $collection ?? new ArrayCollection();
+        $this->blacklist = $blacklist ?? new ArrayCollection();
     }
 
     /**
@@ -66,13 +75,7 @@ class InMemoryAccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function revokeAccessToken($tokenId): void
     {
-        $result = $this->collection->filter(function (AccessTokenEntityInterface $token) use ($tokenId) {
-            return $token->getIdentifier() === $tokenId;
-        });
-
-        if (! $result->isEmpty()) {
-            $this->collection->removeElement($result->first());
-        }
+        $this->blacklist->add($tokenId);
     }
 
     /**
@@ -84,14 +87,6 @@ class InMemoryAccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function isAccessTokenRevoked($tokenId): bool
     {
-        $result = $this->collection->filter(function (AccessTokenEntityInterface $token) use ($tokenId) {
-            return $token->getIdentifier() === $tokenId;
-        });
-
-        if (! $result->isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return $this->blacklist->contains($tokenId);
     }
 }

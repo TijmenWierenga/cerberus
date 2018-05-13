@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+  test:
+    image: cerberus/php:7.2
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    command: ["bin/phpunit", "--testsuite", "functional"]
+
+  mongo:
+    image: mongo:3
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
+    driver: local
