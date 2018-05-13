@@ -37,7 +37,6 @@ class InMemoryAccessTokenRepositoryTest extends TestCase
     public function testItPersistsAToken(AccessTokenEntityInterface $token): AccessTokenEntityInterface
     {
         $repository = new InMemoryAccessTokenRepository();
-        $this->assertTrue($repository->isAccessTokenRevoked($token->getIdentifier()));
 
         $repository->persistNewAccessToken($token);
         $this->assertFalse($repository->isAccessTokenRevoked($token->getIdentifier()));

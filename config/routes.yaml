@@ -4,6 +4,6 @@ access_token_request:
     controller: Cerberus\Controller\OAuthController::accessTokenRequest
 
 create_client:
-    path: /client
+    path: /api/client
     methods: [POST]
     controller: Cerberus\Controller\ClientController::create
