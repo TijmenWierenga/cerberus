@@ -52,6 +52,8 @@ class ClientController
 
         $result = $this->clientService->create($request);
 
+        // TODO: Transform $result to Response
+
         return $response;
     }
 }
