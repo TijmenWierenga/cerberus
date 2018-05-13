@@ -49,4 +49,28 @@ class OAuthToken extends AbstractToken
     {
         return $this->request;
     }
+
+    /**
+     * @return string
+     */
+    public function getAccessTokenId(): string
+    {
+        return $this->accessTokenId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getUserId(): ?string
+    {
+        return $this->userId;
+    }
 }
