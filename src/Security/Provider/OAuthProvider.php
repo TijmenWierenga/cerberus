@@ -28,11 +28,11 @@ class OAuthProvider implements AuthenticationProviderInterface
      *
      * @param TokenInterface $token The TokenInterface instance to authenticate
      *
-     * @return TokenInterface An authenticated TokenInterface instance, never null
+     * @return OAuthToken An authenticated TokenInterface instance, never null
      *
      * @throws AuthenticationException if the authentication fails
      */
-    public function authenticate(TokenInterface $token)
+    public function authenticate(TokenInterface $token): OAuthToken
     {
         try {
             $request = $this->resourceServer->validateAuthenticatedRequest($token->getCredentials());
@@ -41,7 +41,7 @@ class OAuthProvider implements AuthenticationProviderInterface
             $roles = [];
 
             foreach ($stringScopes as $scope) {
-                $roles[] = new Role('ROLE' . strtoupper($scope));
+                $roles[] = new Role('ROLE_' . strtoupper($scope));
             }
 
             $token = new OAuthToken(
