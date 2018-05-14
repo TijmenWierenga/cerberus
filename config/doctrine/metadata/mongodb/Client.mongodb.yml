@@ -10,3 +10,5 @@ Cerberus\OAuth\Client:
       type: string
     redirectUri:
       type: collection
+    allowedGrantTypes:
+      type: collection
