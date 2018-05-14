@@ -117,4 +117,30 @@ class Client implements ClientEntityInterface
 
         return ! array_diff($grantTypes, $this->allowedGrantTypes);
     }
+
+    public function addAllowedGrantType(string $grantType, ...$grantTypes): void
+    {
+        $grantTypes[] = $grantType;
+
+        $this->allowedGrantTypes = array_merge($this->allowedGrantTypes, $grantTypes);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedGrantTypes(): array
+    {
+        return $this->allowedGrantTypes;
+    }
+
+    public function removeAllowedGrantType(string $grantType, ...$grantTypes): void
+    {
+        $grantTypes[] = $grantType;
+
+        foreach ($grantTypes as $grantType) {
+            if ($key = array_search($grantType, $this->allowedGrantTypes)) {
+                unset($this->allowedGrantTypes[$key]);
+            }
+        }
+    }
 }
