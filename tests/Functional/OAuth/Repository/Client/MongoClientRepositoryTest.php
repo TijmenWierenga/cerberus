@@ -22,7 +22,8 @@ class MongoClientRepositoryTest extends KernelTestCase
 
     public function testItCreatesAClient(): Client
     {
-        $client = Client::new(Uuid::uuid4(), 'test-client', 'a-secret');
+        $client = Client::new(Uuid::uuid4(), 'test-client', 'a-secret', ['https://redirect.com']);
+        $client->addAllowedGrantType('password');
 
         $this->repository->save($client);
 

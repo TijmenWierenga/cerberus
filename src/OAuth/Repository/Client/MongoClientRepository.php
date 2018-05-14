@@ -60,6 +60,10 @@ class MongoClientRepository implements ClientRepositoryInterface
             return null;
         }
 
+        if (! $client->allowsGrantType($grantType)) {
+            throw OAuthServerException::invalidGrant();
+        }
+
         if ($mustValidateSecret) {
             if (! $clientSecret) {
                 throw OAuthServerException::invalidCredentials();
