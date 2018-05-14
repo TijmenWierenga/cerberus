@@ -31,6 +31,7 @@ class PasswordGrantTest extends TestCase
     public function testItExchangesAUsernameAndPasswordForAnAccessToken()
     {
         $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
+        $client->addAllowedGrantType('password');
         $scope = new Scope("test");
         $scope2 = new Scope("god");
         $user = User::new(Uuid::uuid4(), 'tijmen', 'password');
