@@ -16,7 +16,7 @@ class InMemoryClientRepositoryTest extends TestCase
 {
     public function testItReturnsAClientById()
     {
-        $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
         $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity($client->getIdentifier(), 'client_credentials', null, false);
@@ -26,7 +26,7 @@ class InMemoryClientRepositoryTest extends TestCase
 
     public function testItReturnsAClientByIdAndClientSecret()
     {
-        $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
         $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity(
@@ -41,7 +41,7 @@ class InMemoryClientRepositoryTest extends TestCase
 
     public function testItReturnsNullIfSecretDoesNotMatch()
     {
-        $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
         $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
 
         $result = $repo->getClientEntity(
@@ -56,7 +56,7 @@ class InMemoryClientRepositoryTest extends TestCase
 
     public function testItStoresANewClient()
     {
-        $client = Client::new(Uuid::uuid4(), 'tijmen', 'http://www.suchapp.com/callback');
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
         $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([]));
 
         $repo->save($client);

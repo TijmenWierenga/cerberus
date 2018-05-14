@@ -30,7 +30,7 @@ class ClientCredentialsTest extends TestCase
      */
     public function testItExchangesClientCredentialsForAnAccessToken()
     {
-        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', 'https://www.test.me');
+        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
         $scope = new Scope("test");
         $scope2 = new Scope("god");
         $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
