@@ -7,6 +7,7 @@ use Cerberus\OAuth\Exception\UniqueEntityException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
@@ -55,6 +56,10 @@ class InMemoryClientRepository implements ClientRepositoryInterface
 
         if (! $client) {
             return null;
+        }
+
+        if (! $client->allowsGrantType($grantType)) {
+            throw OAuthServerException::invalidGrant();
         }
 
         if ($mustValidateSecret) {

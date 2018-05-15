@@ -26,6 +26,10 @@ class Client implements ClientEntityInterface
      * @var string
      */
     private $clientSecret;
+    /**
+     * @var string[]
+     */
+    private $allowedGrantTypes;
 
     /**
      * Client constructor.
@@ -34,17 +38,24 @@ class Client implements ClientEntityInterface
      * @param string $clientSecret
      * @param string[] $redirectUri
      */
-    private function __construct(UuidInterface $id, string $name, string $clientSecret, array $redirectUri)
+    private function __construct(
+        UuidInterface $id, string $name, string $clientSecret, array $redirectUri, array $allowedGrantTypes)
     {
         $this->id = $id;
         $this->name = $name;
         $this->redirectUri = $redirectUri;
         $this->clientSecret = $clientSecret;
+        $this->allowedGrantTypes = $allowedGrantTypes;
     }
 
-    public static function new(UuidInterface $id, string $name, string $clientSecret, string ...$redirectUri): self
+    public static function new(
+        UuidInterface $id,
+        string $name,
+        string $clientSecret,
+        array $redirectUri,
+        array $allowedGrantTypes = ['auth_code', 'implicit', 'refresh_token']): self
     {
-        return new self($id, $name, $clientSecret, $redirectUri);
+        return new self($id, $name, $clientSecret, $redirectUri, $allowedGrantTypes);
     }
 
     /**
@@ -98,5 +109,38 @@ class Client implements ClientEntityInterface
     public function validateSecret(?string $against): bool
     {
         return $this->clientSecret === $against;
+    }
+
+    public function allowsGrantType(string $grantType, ...$grantTypes): bool
+    {
+        $grantTypes[] = $grantType;
+
+        return ! array_diff($grantTypes, $this->allowedGrantTypes);
+    }
+
+    public function addAllowedGrantType(string $grantType, string ...$grantTypes): void
+    {
+        $grantTypes[] = $grantType;
+
+        $this->allowedGrantTypes = array_merge($this->allowedGrantTypes, $grantTypes);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedGrantTypes(): array
+    {
+        return $this->allowedGrantTypes;
+    }
+
+    public function removeAllowedGrantType(string $grantType, string ...$grantTypes): void
+    {
+        $grantTypes[] = $grantType;
+
+        foreach ($grantTypes as $grantType) {
+            if ($key = array_search($grantType, $this->allowedGrantTypes)) {
+                unset($this->allowedGrantTypes[$key]);
+            }
+        }
     }
 }
