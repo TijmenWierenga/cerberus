@@ -118,7 +118,7 @@ class Client implements ClientEntityInterface
         return ! array_diff($grantTypes, $this->allowedGrantTypes);
     }
 
-    public function addAllowedGrantType(string $grantType, ...$grantTypes): void
+    public function addAllowedGrantType(string $grantType, string ...$grantTypes): void
     {
         $grantTypes[] = $grantType;
 
@@ -133,7 +133,7 @@ class Client implements ClientEntityInterface
         return $this->allowedGrantTypes;
     }
 
-    public function removeAllowedGrantType(string $grantType, ...$grantTypes): void
+    public function removeAllowedGrantType(string $grantType, string ...$grantTypes): void
     {
         $grantTypes[] = $grantType;
 
