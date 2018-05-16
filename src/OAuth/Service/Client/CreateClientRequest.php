@@ -12,14 +12,19 @@ class CreateClientRequest
      * @var string[]
      */
     private $redirectUris;
+    /**
+     * @var string[]
+     */
+    private $allowedGrantTypes;
 
     /**
      * CreateClientRequest constructor.
      */
-    public function __construct(string $name, string ...$redirectUris)
+    public function __construct(string $name, array $redirectUris, array $allowedGrantTypes = [])
     {
         $this->name = $name;
         $this->redirectUris = $redirectUris;
+        $this->allowedGrantTypes = $allowedGrantTypes;
     }
 
     /**
@@ -36,5 +41,13 @@ class CreateClientRequest
     public function getRedirectUris(): array
     {
         return $this->redirectUris;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedGrantTypes(): array
+    {
+        return $this->allowedGrantTypes;
     }
 }

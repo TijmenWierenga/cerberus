@@ -5,6 +5,7 @@ namespace Cerberus\OAuth\Service\Client;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Repository\Client\ClientRepositoryInterface;
+use Cerberus\OAuth\Scope;
 use Ramsey\Uuid\Uuid;
 
 class ClientService
@@ -34,7 +35,8 @@ class ClientService
             Uuid::uuid4(),
             $request->getName(),
             $hash,
-            ...$request->getRedirectUris()
+            $request->getRedirectUris(),
+            $request->getAllowedGrantTypes()
         );
 
         $this->clientRepository->save($client);
