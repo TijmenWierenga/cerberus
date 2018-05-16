@@ -37,6 +37,11 @@ class ClientController
             'redirect_uris' => [
                 new Type(['type' => 'array']),
                 new All([new Url()])
+            ],
+            'grant_types' => [
+                new Type(['type' => 'array']),
+                // TODO: Only allow existing grant types
+                new All([new Type(['type' => 'string'])])
             ]
         ]);
 
@@ -48,7 +53,7 @@ class ClientController
             // TODO: Throw exception
         }
 
-        $request = new CreateClientRequest($requestBody['name'], ...$requestBody['redirect_uris']);
+        $request = new CreateClientRequest($requestBody['name'], $requestBody['redirect_uris'], $requestBody['grant_types']);
 
         $result = $this->clientService->create($request);
 
