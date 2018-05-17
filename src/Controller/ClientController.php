@@ -4,6 +4,9 @@ namespace Cerberus\Controller;
 
 use Cerberus\OAuth\Service\Client\ClientService;
 use Cerberus\OAuth\Service\Client\CreateClientRequest;
+use Cerberus\Transformer\CreateClientResponseTransformer;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Item;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Validator\Constraints\All;
@@ -23,11 +26,16 @@ class ClientController
      * @var ValidatorInterface
      */
     private $validator;
+    /**
+     * @var Manager
+     */
+    private $transformer;
 
-    public function __construct(ClientService $clientService, ValidatorInterface $validator)
+    public function __construct(ClientService $clientService, ValidatorInterface $validator, Manager $transformer)
     {
         $this->clientService = $clientService;
         $this->validator = $validator;
+        $this->transformer = $transformer;
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -54,10 +62,11 @@ class ClientController
         }
 
         $request = new CreateClientRequest($requestBody['name'], $requestBody['redirect_uris'], $requestBody['grant_types']);
+        $resource = new Item($this->clientService->create($request), new CreateClientResponseTransformer());
+        $content = $this->transformer->createData($resource);
 
-        $result = $this->clientService->create($request);
-
-        // TODO: Transform $result to Response
+        $response = $response->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write($content->toJson());
 
         return $response;
     }
