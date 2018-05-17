@@ -81,3 +81,10 @@ services:
 
     Zend\Diactoros\Response: ~
     Psr\Http\Message\ResponseInterface: '@Zend\Diactoros\Response'
+
+    League\Fractal\Serializer\DataArraySerializer: ~
+    League\Fractal\Manager:
+        calls:
+          - method: setSerializer
+            arguments:
+              - '@League\Fractal\Serializer\DataArraySerializer'
