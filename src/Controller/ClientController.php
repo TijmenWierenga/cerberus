@@ -4,11 +4,14 @@ namespace Cerberus\Controller;
 
 use Cerberus\OAuth\Service\Client\ClientService;
 use Cerberus\OAuth\Service\Client\CreateClientRequest;
+use Cerberus\Response\ResourceResponse;
 use Cerberus\Transformer\CreateClientResponseTransformer;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Item;
+use League\Fractal\Scope;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -38,7 +41,7 @@ class ClientController
         $this->transformer = $transformer;
     }
 
-    public function create(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function create(ServerRequestInterface $request): ResourceResponse
     {
         $constraint = new Collection([
             'name' => new NotBlank(),
@@ -65,9 +68,6 @@ class ClientController
         $resource = new Item($this->clientService->create($request), new CreateClientResponseTransformer());
         $content = $this->transformer->createData($resource);
 
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write($content->toJson());
-
-        return $response;
+        return new ResourceResponse($content, Response::HTTP_CREATED);
     }
 }
