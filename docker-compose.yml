@@ -6,7 +6,7 @@ services:
     build:
       context: ./docker/php
       args:
-        - USER_ID=${UID}
+        - USER_ID=${USER_ID}
     ports:
       - 8080:8080
     volumes:
