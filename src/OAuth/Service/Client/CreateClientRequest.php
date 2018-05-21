@@ -2,6 +2,8 @@
 
 namespace Cerberus\OAuth\Service\Client;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class CreateClientRequest
 {
     /**
@@ -25,6 +27,12 @@ class CreateClientRequest
         $this->name = $name;
         $this->redirectUris = $redirectUris;
         $this->allowedGrantTypes = $allowedGrantTypes;
+    }
+
+    public static function fromRequest(ServerRequestInterface $request): self
+    {
+        $body = $request->getParsedBody();
+        return new self($body["name"], $body["redirect_uris"], $body["grant_types"]);
     }
 
     /**
