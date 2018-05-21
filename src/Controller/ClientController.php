@@ -7,43 +7,33 @@ use Cerberus\OAuth\Service\Client\CreateClientRequest;
 use Cerberus\Response\ResourceResponse;
 use Cerberus\Transformer\CreateClientResponseTransformer;
 use League\Fractal\Manager;
-use League\Fractal\Resource\Item;
-use League\Fractal\Scope;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class ClientController
+final class ClientController extends BaseController
 {
     /**
      * @var ClientService
      */
     private $clientService;
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
-    /**
-     * @var Manager
-     */
-    private $transformer;
 
     public function __construct(ClientService $clientService, ValidatorInterface $validator, Manager $transformer)
     {
         $this->clientService = $clientService;
-        $this->validator = $validator;
-        $this->transformer = $transformer;
+
+        parent::__construct($validator, $transformer);
     }
 
     public function create(ServerRequestInterface $request): ResourceResponse
     {
-        $constraint = new Collection([
+        $constraints = new Collection([
             'name' => new NotBlank(),
             'redirect_uris' => [
                 new Type(['type' => 'array']),
@@ -51,22 +41,22 @@ class ClientController
             ],
             'grant_types' => [
                 new Type(['type' => 'array']),
-                // TODO: Only allow existing grant types
-                new All([new Type(['type' => 'string'])])
+                new All([
+                    new Type(['type' => 'string']),
+                    new Choice([
+                        'choices' => $choices = [
+                            'password', 'client_credentials', 'auth_code', 'implicit', 'refresh_token'
+                        ],
+                        'message' => 'Invalid grant type. Allowed grants: ' . implode($choices, ', ')
+                    ])
+                ])
             ]
         ]);
 
-        $requestBody = $request->getParsedBody();
+        $this->validate($request, $constraints);
 
-        $violations = $this->validator->validate($requestBody, $constraint);
-
-        if ($violations->count()) {
-            // TODO: Throw exception
-        }
-
-        $request = new CreateClientRequest($requestBody['name'], $requestBody['redirect_uris'], $requestBody['grant_types']);
-        $resource = new Item($this->clientService->create($request), new CreateClientResponseTransformer());
-        $content = $this->transformer->createData($resource);
+        $request = CreateClientRequest::fromRequest($request);
+        $content = $this->generateItem($this->clientService->create($request), new CreateClientResponseTransformer());
 
         return new ResourceResponse($content, Response::HTTP_CREATED);
     }
