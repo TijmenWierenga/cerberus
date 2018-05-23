@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class BaseController
 {
-
     /**
      * @var ValidatorInterface
      */
