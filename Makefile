@@ -14,6 +14,7 @@ stop:
 unit-test:
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 bin/phpunit --testsuite unit
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpstan analyze src --level 7
+	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpcs src --standard=PSR2
 functional-test:
 	docker-compose -f docker-compose.test.yml up -d mongo
 	docker-compose -f docker-compose.test.yml run test
