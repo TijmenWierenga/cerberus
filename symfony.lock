@@ -56,6 +56,9 @@
     "league/event": {
         "version": "2.1.2"
     },
+    "league/fractal": {
+        "version": "0.17.0"
+    },
     "league/oauth2-server": {
         "version": "6.1.1"
     },

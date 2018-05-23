@@ -30,8 +30,8 @@ class OAuthToken extends AbstractToken
         string $accessTokenId,
         string $clientId,
         ?string $userId,
-        Role ...$roles)
-    {
+        Role ...$roles
+    ) {
         $this->request = $request;
         $this->accessTokenId = $accessTokenId;
         $this->clientId = $clientId;

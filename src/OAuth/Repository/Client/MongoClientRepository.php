@@ -51,8 +51,7 @@ class MongoClientRepository implements ClientRepositoryInterface
         $grantType,
         $clientSecret = null,
         $mustValidateSecret = true
-    ): ?Client
-    {
+    ): ?Client {
         /** @var Client|null $client */
         $client = $this->repository->find($clientIdentifier);
 

@@ -39,8 +39,12 @@ class Client implements ClientEntityInterface
      * @param string[] $redirectUri
      */
     private function __construct(
-        UuidInterface $id, string $name, string $clientSecret, array $redirectUri, array $allowedGrantTypes)
-    {
+        UuidInterface $id,
+        string $name,
+        string $clientSecret,
+        array $redirectUri,
+        array $allowedGrantTypes
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->redirectUri = $redirectUri;
@@ -53,8 +57,8 @@ class Client implements ClientEntityInterface
         string $name,
         string $clientSecret,
         array $redirectUri,
-        array $allowedGrantTypes = ['auth_code', 'implicit', 'refresh_token']): self
-    {
+        array $allowedGrantTypes = ['auth_code', 'implicit', 'refresh_token']
+    ): self {
         return new self($id, $name, $clientSecret, $redirectUri, $allowedGrantTypes);
     }
 

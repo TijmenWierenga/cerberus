@@ -1,7 +1,6 @@
 <?php
 namespace Cerberus\Hasher;
 
-
 interface HasherInterface
 {
     public function hash(string $value): string;

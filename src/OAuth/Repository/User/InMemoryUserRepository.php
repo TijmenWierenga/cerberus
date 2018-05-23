@@ -41,8 +41,7 @@ class InMemoryUserRepository implements UserRepositoryInterface
         $password,
         $grantType,
         ClientEntityInterface $clientEntity
-    )
-    {
+    ) {
         $result = $this->collection->filter(function (User $user) use ($username, $password) {
              return ($user->getUsername() === $username && $user->getPassword() === $password);
         });
