@@ -6,11 +6,11 @@ use Cerberus\OAuth\Service\Client\ClientService;
 use Cerberus\OAuth\Service\Client\CreateClientRequest;
 use Cerberus\Response\ResourceResponse;
 use Cerberus\Transformer\CreateClientResponseTransformer;
+use Cerberus\Validation\GrantType;
 use League\Fractal\Manager;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\All;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
@@ -41,15 +41,7 @@ final class ClientController extends BaseController
             ],
             'grant_types' => [
                 new Type(['type' => 'array']),
-                new All([
-                    new Type(['type' => 'string']),
-                    new Choice([
-                        'choices' => $choices = [
-                            'password', 'client_credentials', 'auth_code', 'implicit', 'refresh_token'
-                        ],
-                        'message' => 'Invalid grant type. Allowed grants: ' . implode($choices, ', ')
-                    ])
-                ])
+                new All([new GrantType()])
             ]
         ]);
 
