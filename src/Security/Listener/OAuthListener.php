@@ -37,6 +37,13 @@ class OAuthListener implements ListenerInterface
         $request = $event->getRequest();
 
         try {
+            // TODO: Unsure whether this belongs here. This is here to check if there is an authenticated token
+            // already so we can skip authentication. Mainly for testing purposes.
+            $token = $this->tokenStorage->getToken();
+            if ($token instanceof OAuthToken && $token->isAuthenticated()) {
+                return;
+            }
+
             $preToken = new PreOAuthToken((new DiactorosFactory())->createRequest($request));
             $this->tokenStorage->setToken($preToken);
             $token = $this->authenticationManager->authenticate($preToken);
