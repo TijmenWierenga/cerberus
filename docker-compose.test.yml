@@ -1,12 +1,19 @@
 version: '3.3'
 
 services:
-  test:
+  functional_test:
     image: cerberus/php:7.2
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
     command: ["bin/phpunit", "--testsuite", "functional"]
+
+  integration_test:
+    image: cerberus/php:7.2
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    command: ["bin/phpunit", "--testsuite", "integration"]
 
   mongo:
     image: mongo:3
