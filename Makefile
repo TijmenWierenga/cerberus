@@ -17,8 +17,12 @@ unit-test:
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpcs src --standard=PSR2
 functional-test:
 	docker-compose -f docker-compose.test.yml up -d mongo
-	docker-compose -f docker-compose.test.yml run test
+	-docker-compose -f docker-compose.test.yml run functional_test
+	docker-compose -f docker-compose.test.yml down --volumes
+integration-test:
+	docker-compose -f docker-compose.test.yml up -d mongo
+	-docker-compose -f docker-compose.test.yml run integration_test
 	docker-compose -f docker-compose.test.yml down --volumes
 
-.SILENT: keys server unit-test functional-test init build stop
+.SILENT: keys server unit-test functional-test integration-test init build stop
 .PHONY: server test

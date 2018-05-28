@@ -25,6 +25,7 @@
     "require-dev": {
         "phpstan/phpstan": "^0.9.1",
         "squizlabs/php_codesniffer": "^3.2",
+        "symfony/browser-kit": "^4.0",
         "symfony/dotenv": "^4.0",
         "symfony/phpunit-bridge": "^4.0",
         "symfony/var-dumper": "^4.0",

@@ -73,9 +73,12 @@ class OAuthListenerTest extends TestCase
                 [null] // Token should be reset to null
             );
 
-        $this->tokenStorage->expects($this->once())
+        $this->tokenStorage->expects($this->exactly(2))
             ->method('getToken')
-            ->willReturn($this->getMockBuilder(PreOAuthToken::class)->disableOriginalConstructor()->getMock());
+            ->willReturnOnConsecutiveCalls(
+                null,
+                $this->getMockBuilder(PreOAuthToken::class)->disableOriginalConstructor()->getMock()
+            );
 
         $this->authenticationManager->expects($this->once())
             ->method('authenticate')
