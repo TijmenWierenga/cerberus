@@ -49,4 +49,12 @@ class MongoClientRepositoryTest extends KernelTestCase
             true
         ));
     }
+
+    /**
+     * @depends testItCreatesAClient
+     */
+    public function testItFindsAClientById(Client $client)
+    {
+        $this->assertEquals($client, $this->repository->find($client->getIdentifier()));
+    }
 }
