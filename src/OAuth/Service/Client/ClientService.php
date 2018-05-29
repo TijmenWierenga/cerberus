@@ -49,4 +49,9 @@ class ClientService
     {
         return $this->clientRepository->findPaginated($page, $perPage);
     }
+
+    public function find(string $id): Client
+    {
+        return $this->clientRepository->find($id);
+    }
 }
