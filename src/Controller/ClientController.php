@@ -59,6 +59,13 @@ final class ClientController extends BaseController
         return new ResourceResponse($content, Response::HTTP_CREATED);
     }
 
+    public function find(string $id)
+    {
+        $content = $this->generateItem($this->clientService->find($id), new ClientTransformer());
+
+        return new ResourceResponse($content, Response::HTTP_OK);
+    }
+
     public function findPaginated(ServerRequestInterface $request): ResourceResponse
     {
         $page = $request->getQueryParams()['page'] ?? 1;
