@@ -2,9 +2,9 @@
 namespace Cerberus\OAuth\Repository\Client;
 
 use Cerberus\Collection\PaginatedCollection;
+use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
-use Cerberus\OAuth\Exception\UniqueEntityException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -109,5 +109,24 @@ class InMemoryClientRepository implements ClientRepositoryInterface
         $paginator->setCurrentPage($page);
 
         return new PaginatedCollection($paginator->getCurrentPageResults(), $paginator);
+    }
+
+    /**
+     * Finds a client by id
+     *
+     * @param string $id
+     * @return Client
+     */
+    public function find(string $id): Client
+    {
+        $result = $this->collection->filter(function (ClientEntityInterface $client) use ($id) {
+            return $client->getIdentifier() === $id;
+        });
+
+        if ($result->isEmpty()) {
+            throw EntityNotFoundException::forClass(Client::class, $id);
+        }
+
+        return $result->first();
     }
 }
