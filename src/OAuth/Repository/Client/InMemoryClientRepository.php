@@ -1,6 +1,7 @@
 <?php
 namespace Cerberus\OAuth\Repository\Client;
 
+use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Exception\UniqueEntityException;
@@ -8,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
@@ -92,5 +95,19 @@ class InMemoryClientRepository implements ClientRepositoryInterface
         }
 
         return $result->first();
+    }
+
+    /**
+     * @param int $page
+     * @param int $perPage
+     * @return PaginatedCollection
+     */
+    public function findPaginated(int $page, int $perPage): PaginatedCollection
+    {
+        $paginator = new Pagerfanta(new ArrayAdapter($this->collection->toArray()));
+        $paginator->setMaxPerPage($perPage);
+        $paginator->setCurrentPage($page);
+
+        return new PaginatedCollection($paginator->getCurrentPageResults(), $paginator);
     }
 }
