@@ -3,7 +3,12 @@ access_token_request:
     methods: [POST]
     controller: Cerberus\Controller\OAuthController::accessTokenRequest
 
-create_client:
+client_create:
     path: /api/client
     methods: [POST]
     controller: Cerberus\Controller\ClientController::create
+
+client_find:
+    path: /api/client
+    methods: [GET]
+    controller: Cerberus\Controller\ClientController::findPaginated
