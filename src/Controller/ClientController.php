@@ -4,7 +4,9 @@ namespace Cerberus\Controller;
 
 use Cerberus\OAuth\Service\Client\ClientService;
 use Cerberus\OAuth\Service\Client\CreateClientRequest;
+use Cerberus\Pagination\PagerfantaPaginationAdapterFactory;
 use Cerberus\Response\ResourceResponse;
+use Cerberus\Transformer\ClientTransformer;
 use Cerberus\Transformer\CreateClientResponseTransformer;
 use Cerberus\Validation\GrantType;
 use League\Fractal\Manager;
@@ -24,11 +26,15 @@ final class ClientController extends BaseController
      */
     private $clientService;
 
-    public function __construct(ClientService $clientService, ValidatorInterface $validator, Manager $transformer)
-    {
+    public function __construct(
+        ClientService $clientService,
+        ValidatorInterface $validator,
+        Manager $transformer,
+        PagerfantaPaginationAdapterFactory $paginationAdapterFactory
+    ) {
         $this->clientService = $clientService;
 
-        parent::__construct($validator, $transformer);
+        parent::__construct($validator, $transformer, $paginationAdapterFactory);
     }
 
     public function create(ServerRequestInterface $request): ResourceResponse
@@ -51,5 +57,14 @@ final class ClientController extends BaseController
         $content = $this->generateItem($this->clientService->create($request), new CreateClientResponseTransformer());
 
         return new ResourceResponse($content, Response::HTTP_CREATED);
+    }
+
+    public function findPaginated(ServerRequestInterface $request): ResourceResponse
+    {
+        $page = $request->getQueryParams()['page'] ?? 1;
+        $collection = $this->clientService->findPaginated($page, 5);
+        $content = $this->generateCollection($collection, new ClientTransformer(), $request);
+
+        return new ResourceResponse($content, Response::HTTP_OK);
     }
 }
