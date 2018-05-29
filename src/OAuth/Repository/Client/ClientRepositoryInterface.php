@@ -15,6 +15,14 @@ interface ClientRepositoryInterface extends OAuthClientRepositoryInterface
     public function save(Client $client): void;
 
     /**
+     * Finds a client by id
+     *
+     * @param string $id
+     * @return Client
+     */
+    public function find(string $id): Client;
+
+    /**
      * Returns a paginated list of clients
      *
      * @param int $page
