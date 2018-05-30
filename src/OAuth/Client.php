@@ -82,6 +82,11 @@ class Client implements ClientEntityInterface
         return $this->name;
     }
 
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
     /**
      * Returns the registered redirect URI (as a string).
      *
@@ -92,6 +97,11 @@ class Client implements ClientEntityInterface
     public function getRedirectUri(): array
     {
         return $this->redirectUri;
+    }
+
+    public function setRedirectUri(array $redirectUri): void
+    {
+        $this->redirectUri = $redirectUri;
     }
 
     /**
@@ -142,7 +152,8 @@ class Client implements ClientEntityInterface
         $grantTypes[] = $grantType;
 
         foreach ($grantTypes as $grantType) {
-            if ($key = array_search($grantType, $this->allowedGrantTypes)) {
+            $key = array_search($grantType, $this->allowedGrantTypes);
+            if (is_integer($key)) {
                 unset($this->allowedGrantTypes[$key]);
             }
         }
