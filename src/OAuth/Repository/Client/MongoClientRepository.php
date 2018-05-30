@@ -2,11 +2,14 @@
 
 namespace Cerberus\OAuth\Repository\Client;
 
+use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Pagerfanta\Adapter\DoctrineODMMongoDBAdapter;
+use Pagerfanta\Pagerfanta;
 
 class MongoClientRepository implements ClientRepositoryInterface
 {
@@ -22,6 +25,10 @@ class MongoClientRepository implements ClientRepositoryInterface
      * @var HasherInterface
      */
     private $hasher;
+    /**
+     * @var Pagerfanta
+     */
+    private $paginator;
 
     /**
      * MongoClientRepository constructor.
@@ -33,6 +40,9 @@ class MongoClientRepository implements ClientRepositoryInterface
         $this->repository = $manager->getRepository('Cerberus:Client');
         $this->manager = $manager;
         $this->hasher = $hasher;
+        $queryBuilder = $this->manager->createQueryBuilder('Cerberus:Client');
+        $mongoAdapter = new DoctrineODMMongoDBAdapter($queryBuilder);
+        $this->paginator = new Pagerfanta($mongoAdapter);
     }
 
     /**
@@ -85,5 +95,14 @@ class MongoClientRepository implements ClientRepositoryInterface
     {
         $this->manager->persist($client);
         $this->manager->flush();
+    }
+
+    public function findPaginated(int $page, int $perPage): PaginatedCollection
+    {
+        $this->paginator->setMaxPerPage($perPage);
+        $this->paginator->setCurrentPage($page);
+        $items = $this->paginator->getCurrentPageResults();
+
+        return new PaginatedCollection($items, $this->paginator);
     }
 }

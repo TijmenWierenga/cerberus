@@ -2,6 +2,7 @@
 
 namespace Cerberus\OAuth\Service\Client;
 
+use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Repository\Client\ClientRepositoryInterface;
@@ -42,5 +43,10 @@ class ClientService
         $this->clientRepository->save($client);
 
         return new CreateClientResponse($client, $secret);
+    }
+
+    public function findPaginated(int $page = 1, int $perPage = 10): PaginatedCollection
+    {
+        return $this->clientRepository->findPaginated($page, $perPage);
     }
 }

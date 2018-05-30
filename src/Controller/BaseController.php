@@ -2,8 +2,11 @@
 
 namespace Cerberus\Controller;
 
+use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Exception\ValidationException;
+use Cerberus\Pagination\PagerfantaPaginationAdapterFactory;
 use League\Fractal\Manager;
+use League\Fractal\Resource\Collection as ResourceCollection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Scope;
 use League\Fractal\TransformerAbstract;
@@ -21,16 +24,35 @@ abstract class BaseController
      * @var Manager
      */
     private $transformer;
+    /**
+     * @var PagerfantaPaginationAdapterFactory
+     */
+    private $paginatorAdapterFactory;
 
-    public function __construct(ValidatorInterface $validator, Manager $transformer)
-    {
+    public function __construct(
+        ValidatorInterface $validator,
+        Manager $transformer,
+        PagerfantaPaginationAdapterFactory $paginatorAdapterFactory
+    ) {
         $this->validator = $validator;
         $this->transformer = $transformer;
+        $this->paginatorAdapterFactory = $paginatorAdapterFactory;
     }
 
     protected function generateItem(object $object, TransformerAbstract $transformer): Scope
     {
         return $this->transformer->createData(new Item($object, $transformer));
+    }
+
+    protected function generateCollection(
+        PaginatedCollection $collection,
+        TransformerAbstract $transformer,
+        ServerRequestInterface $request
+    ): Scope {
+        $scope = new ResourceCollection($collection->getItems(), $transformer);
+        $scope->setPaginator($this->paginatorAdapterFactory->create($collection->getPaginator(), $request));
+
+        return $this->transformer->createData($scope);
     }
 
     /**

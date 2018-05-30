@@ -84,4 +84,26 @@ class InMemoryClientRepositoryTest extends TestCase
             false
         ));
     }
+
+    public function testItReturnsAPaginatedListOfClients()
+    {
+        [$first, $second, $third] = $result = [
+            $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']),
+            $client = Client::new(Uuid::uuid4(), 'bart', 'a-secret', ['https://redirect.com']),
+            $client = Client::new(Uuid::uuid4(), 'paul', 'a-secret', ['https://redirect.com'])
+        ];
+
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection($result));
+        $result = $repo->findPaginated(1, 2);
+
+        $this->assertContains($first, $result->getItems());
+        $this->assertContains($second, $result->getItems());
+        $this->assertNotContains($third, $result->getItems());
+
+        $result = $repo->findPaginated(2, 2);
+
+        $this->assertNotContains($first, $result->getItems());
+        $this->assertNotContains($second, $result->getItems());
+        $this->assertContains($third, $result->getItems());
+    }
 }
