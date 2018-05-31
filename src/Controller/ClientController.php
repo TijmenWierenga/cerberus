@@ -80,7 +80,9 @@ final class ClientController extends BaseController
 
     public function update(ServerRequestInterface $request, string $id): ResponseInterface
     {
-        $this->clientService->update(new UpdateClientRequest($id, $request->getParsedBody()));
+        /** @var array $body */
+        $body = $request->getParsedBody();
+        $this->clientService->update(new UpdateClientRequest($id, $body));
 
         return (new \Zend\Diactoros\Response())
             ->withStatus(Response::HTTP_NO_CONTENT)
