@@ -4,12 +4,14 @@ namespace Cerberus\Controller;
 
 use Cerberus\OAuth\Service\Client\ClientService;
 use Cerberus\OAuth\Service\Client\CreateClientRequest;
+use Cerberus\OAuth\Service\Client\UpdateClientRequest;
 use Cerberus\Pagination\PagerfantaPaginationAdapterFactory;
 use Cerberus\Response\ResourceResponse;
 use Cerberus\Transformer\ClientTransformer;
 use Cerberus\Transformer\CreateClientResponseTransformer;
 use Cerberus\Validation\GrantType;
 use League\Fractal\Manager;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\All;
@@ -66,5 +68,22 @@ final class ClientController extends BaseController
         $content = $this->generateCollection($collection, new ClientTransformer(), $request);
 
         return new ResourceResponse($content, Response::HTTP_OK);
+    }
+
+    public function find(string $id): ResourceResponse
+    {
+        $client = $this->clientService->find($id);
+        $content = $this->generateItem($client, new ClientTransformer());
+
+        return new ResourceResponse($content, Response::HTTP_OK);
+    }
+
+    public function update(ServerRequestInterface $request, string $id): ResponseInterface
+    {
+        $this->clientService->update(new UpdateClientRequest($id, $request->getParsedBody()));
+
+        return (new \Zend\Diactoros\Response())
+            ->withStatus(Response::HTTP_NO_CONTENT)
+            ->withHeader('Content-Type', 'application/json');
     }
 }
