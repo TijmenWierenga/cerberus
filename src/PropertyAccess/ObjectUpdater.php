@@ -5,7 +5,7 @@ namespace Cerberus\PropertyAccess;
 use Cerberus\Exception\PropertyAccessException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class ObjectUpdater
+class ObjectUpdater implements ObjectUpdaterInterface
 {
     /**
      * @var PropertyAccessorInterface
