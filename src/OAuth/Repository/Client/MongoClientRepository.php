@@ -3,6 +3,7 @@
 namespace Cerberus\OAuth\Repository\Client;
 
 use Cerberus\Collection\PaginatedCollection;
+use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Client;
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -104,5 +105,22 @@ class MongoClientRepository implements ClientRepositoryInterface
         $items = $this->paginator->getCurrentPageResults();
 
         return new PaginatedCollection($items, $this->paginator);
+    }
+
+    /**
+     * @param string $id
+     * @return Client
+     * @throws EntityNotFoundException
+     */
+    public function find(string $id): Client
+    {
+        /** @var Client $client */
+        $client = $this->repository->find($id);
+
+        if (! $client) {
+            throw EntityNotFoundException::create(Client::class, $id);
+        }
+
+        return $client;
     }
 }
