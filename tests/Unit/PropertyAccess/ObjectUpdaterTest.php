@@ -31,7 +31,7 @@ class ObjectUpdaterTest extends TestCase
 
         $values = [
             'name' => 'paul',
-            'redirect_uri' => [
+            'redirect_uris' => [
                 'https://www.callback.nl',
                 'https://www.oauth.com'
             ],

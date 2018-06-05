@@ -21,7 +21,7 @@ class Client implements ClientEntityInterface
     /**
      * @var string[]
      */
-    private $redirectUri;
+    private $redirectUris;
     /**
      * @var string
      */
@@ -36,18 +36,18 @@ class Client implements ClientEntityInterface
      * @param UuidInterface $id
      * @param string $name
      * @param string $clientSecret
-     * @param string[] $redirectUri
+     * @param string[] $redirectUris
      */
     private function __construct(
         UuidInterface $id,
         string $name,
         string $clientSecret,
-        array $redirectUri,
+        array $redirectUris,
         array $allowedGrantTypes
     ) {
         $this->id = $id;
         $this->name = $name;
-        $this->redirectUri = $redirectUri;
+        $this->redirectUris = $redirectUris;
         $this->clientSecret = $clientSecret;
         $this->allowedGrantTypes = $allowedGrantTypes;
     }
@@ -56,10 +56,10 @@ class Client implements ClientEntityInterface
         UuidInterface $id,
         string $name,
         string $clientSecret,
-        array $redirectUri,
+        array $redirectUris,
         array $allowedGrantTypes = ['auth_code', 'implicit', 'refresh_token']
     ): self {
-        return new self($id, $name, $clientSecret, $redirectUri, $allowedGrantTypes);
+        return new self($id, $name, $clientSecret, $redirectUris, $allowedGrantTypes);
     }
 
     /**
@@ -96,12 +96,33 @@ class Client implements ClientEntityInterface
      */
     public function getRedirectUri(): array
     {
-        return $this->redirectUri;
+        return $this->redirectUris;
     }
 
-    public function setRedirectUri(array $redirectUri): void
+    /**
+     * Proxy method in plural for Symfony Property Accessor to allow updating values from an array.
+     */
+    public function getRedirectUris(): array
     {
-        $this->redirectUri = $redirectUri;
+        return $this->getRedirectUri();
+    }
+
+    public function addRedirectUri(string $redirectUri): void
+    {
+        if (! in_array($redirectUri, $this->redirectUris)) {
+            $this->redirectUris[] = $redirectUri;
+        }
+    }
+
+    public function removeRedirectUri(string $redirectUri): void
+    {
+        if (in_array($redirectUri, $this->redirectUris)) {
+            $key = array_search($redirectUri, $this->redirectUris);
+
+            if (is_integer($key)) {
+                unset($this->redirectUris[$key]);
+            }
+        }
     }
 
     /**

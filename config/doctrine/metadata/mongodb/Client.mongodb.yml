@@ -8,7 +8,7 @@ Cerberus\OAuth\Client:
       type: string
     clientSecret:
       type: string
-    redirectUri:
+    redirectUris:
       type: collection
     allowedGrantTypes:
       type: collection
