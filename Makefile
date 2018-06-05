@@ -23,6 +23,9 @@ integration-test:
 	docker-compose -f docker-compose.test.yml up -d mongo
 	-docker-compose -f docker-compose.test.yml run integration_test
 	docker-compose -f docker-compose.test.yml down --volumes
+test: unit-test functional-test integration-test
+create_client:
+	docker-compose run -w /var/www/html server bin/console oauth:client:create default -g password -g refresh_token -g auth_code -g client_credentials -g implicit https://www.tijmenwierenga.nl/callback
 
-.SILENT: keys server unit-test functional-test integration-test init build stop
+.SILENT: keys server unit-test functional-test integration-test init build stop create_client test
 .PHONY: server test

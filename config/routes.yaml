@@ -8,7 +8,17 @@ client_create:
     methods: [POST]
     controller: Cerberus\Controller\ClientController::create
 
-client_find:
+client_find_many:
     path: /api/client
     methods: [GET]
     controller: Cerberus\Controller\ClientController::findPaginated
+
+client_find:
+    path: /api/client/{id}
+    methods: [GET]
+    controller: Cerberus\Controller\ClientController::find
+
+client_update:
+    path: /api/client/{id}
+    methods: [PUT]
+    controller: Cerberus\Controller\ClientController::update

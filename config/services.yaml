@@ -34,6 +34,7 @@ services:
 
     Cerberus\Hasher\HasherInterface: '@Cerberus\Hasher\ArgonPasswordHasher'
     Cerberus\OAuth\Repository\Client\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
+    Cerberus\PropertyAccess\ObjectUpdaterInterface: '@Cerberus\PropertyAccess\ObjectUpdater'
 
     Cerberus\Security\Listener\OAuthListener:
         arguments:

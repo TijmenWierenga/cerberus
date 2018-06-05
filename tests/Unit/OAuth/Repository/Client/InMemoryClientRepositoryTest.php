@@ -2,6 +2,7 @@
 
 namespace Cerberus\Tests\Unit\OAuth\Repository;
 
+use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Hasher\PlainTextHasher;
 use Cerberus\Oauth\Client;
 use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
@@ -24,6 +25,22 @@ class InMemoryClientRepositoryTest extends TestCase
         $result = $repo->getClientEntity($client->getIdentifier(), 'client_credentials', null, false);
 
         $this->assertEquals($client, $result);
+    }
+
+    public function testItFindsAClientById()
+    {
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
+
+        $this->assertEquals($client, $repo->find($client->getIdentifier()));
+    }
+
+    public function testItFailsWhenAClientCannotBeFound()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection());
+        $repo->find(Uuid::uuid4()); // Random ID
     }
 
     public function testItDoesNotReturnIfGrantTypeIsUnsupportedForClient()

@@ -37,7 +37,9 @@ class JsonRequestParser implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if ($request->getContentType() === "json" && $request->isMethod('POST')) {
+        if ($request->getContentType() === "json" &&
+            ($request->isMethod('POST') || $request->isMethod('PUT'))
+        ) {
             $result = json_decode($request->getContent(), true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {

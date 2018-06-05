@@ -2,6 +2,7 @@
 
 namespace Cerberus\Tests\Functional\OAuth\Repository\Client;
 
+use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Repository\Client\MongoClientRepository;
 use Ramsey\Uuid\Uuid;
@@ -48,5 +49,20 @@ class MongoClientRepositoryTest extends KernelTestCase
             'a-secret',
             true
         ));
+    }
+
+    /**
+     * @depends testItCreatesAClient
+     */
+    public function testItFindsAClient(Client $client)
+    {
+        $this->assertEquals($client, $this->repository->find($client->getIdentifier()));
+    }
+
+    public function testItFailsWhenClientCannotBeFound()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->repository->find(Uuid::uuid4());
     }
 }

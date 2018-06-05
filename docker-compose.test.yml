@@ -18,8 +18,8 @@ services:
   mongo:
     image: mongo:3
     volumes:
-      - mongo-data:/data/db
+      - mongo-test-data:/data/db
 
 volumes:
-  mongo-data:
+  mongo-test-data:
     driver: local
