@@ -123,4 +123,15 @@ class InMemoryClientRepositoryTest extends TestCase
         $this->assertNotContains($second, $result->getItems());
         $this->assertContains($third, $result->getItems());
     }
+
+    public function testItRemovesAClient()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $client = Client::new(Uuid::uuid4(), 'tijmen', 'a-secret', ['https://redirect.com']);
+
+        $repo = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
+        $repo->delete($client->getIdentifier());
+        $repo->find($client->getIdentifier());
+    }
 }

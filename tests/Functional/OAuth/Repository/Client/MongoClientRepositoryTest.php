@@ -57,6 +57,19 @@ class MongoClientRepositoryTest extends KernelTestCase
     public function testItFindsAClient(Client $client)
     {
         $this->assertEquals($client, $this->repository->find($client->getIdentifier()));
+
+        return $client;
+    }
+
+    /**
+     * @depends testItFindsAClient
+     */
+    public function testItDeletesAClient(Client $client)
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->repository->delete($client->getIdentifier());
+        $this->repository->find($client->getIdentifier());
     }
 
     public function testItFailsWhenClientCannotBeFound()

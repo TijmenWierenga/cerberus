@@ -123,4 +123,18 @@ class MongoClientRepository implements ClientRepositoryInterface
 
         return $client;
     }
+
+    /**
+     * Removes a client from the database
+     *
+     * @param string $id
+     * @throws EntityNotFoundException
+     */
+    public function delete(string $id): void
+    {
+        $client = $this->find($id);
+
+        $this->manager->remove($client);
+        $this->manager->flush($client);
+    }
 }

@@ -23,6 +23,14 @@ interface ClientRepositoryInterface extends OAuthClientRepositoryInterface
     public function find(string $id): Client;
 
     /**
+     * Removes a client from the database
+     *
+     * @param string $id
+     * @throws EntityNotFoundException
+     */
+    public function delete(string $id): void;
+
+    /**
      * Returns a paginated list of clients
      *
      * @param int $page
