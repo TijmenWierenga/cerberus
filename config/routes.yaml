@@ -22,3 +22,8 @@ client_update:
     path: /api/client/{id}
     methods: [PUT]
     controller: Cerberus\Controller\ClientController::update
+
+client_delete:
+    path: /api/client/{id}
+    methods: [DELETE]
+    controller: Cerberus\Controller\ClientController::delete

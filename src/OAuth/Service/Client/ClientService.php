@@ -68,4 +68,9 @@ class ClientService
     {
         return $this->clientRepository->find($id);
     }
+
+    public function delete(string $id): void
+    {
+        $this->clientRepository->delete($id);
+    }
 }

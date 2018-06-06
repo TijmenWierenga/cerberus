@@ -88,4 +88,13 @@ final class ClientController extends BaseController
             ->withStatus(Response::HTTP_NO_CONTENT)
             ->withHeader('Content-Type', 'application/json');
     }
+
+    public function delete(string $id): ResponseInterface
+    {
+        $this->clientService->delete($id);
+
+        return (new \Zend\Diactoros\Response())
+            ->withStatus(Response::HTTP_NO_CONTENT)
+            ->withHeader('Content-Type', 'application/json');
+    }
 }

@@ -126,4 +126,20 @@ class InMemoryClientRepository implements ClientRepositoryInterface
 
         return $client;
     }
+
+    /**
+     * Removes a client from the database
+     *
+     * @param string $id
+     */
+    public function delete(string $id): void
+    {
+        $client = $this->getClient($id);
+
+        if (! $client) {
+            throw EntityNotFoundException::create(Client::class, $id);
+        }
+
+        $this->collection->removeElement($client);
+    }
 }
