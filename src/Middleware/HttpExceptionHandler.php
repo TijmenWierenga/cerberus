@@ -40,6 +40,7 @@ class HttpExceptionHandler implements EventSubscriberInterface
         $exception = $event->getException();
 
         if ($exception instanceof HttpException) {
+            // TODO: Might want to refactor this by using Fractal and create a response based on the accept header
             $response = new JsonResponse([
                 "message" => $exception->getMessage()
             ], $exception->getStatusCode());
