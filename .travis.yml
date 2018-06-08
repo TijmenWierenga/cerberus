@@ -11,6 +11,9 @@ env:
   DOCKER_COMPOSE_VERSION: 1.16.1
 
 before_install:
+  - mkdir keys
+  - docker run -it --rm -v $(pwd)/keys:/export frapsoft/openssl:latest genrsa -out /export/private.key 2048
+  - docker run -it --rm -v $(pwd)/keys:/export frapsoft/openssl:latest rsa -in /export/private.key -pubout -out /export/public.key
   - docker-compose -f docker-compose.test.yml build
   - docker-compose -f docker-compose.test.yml up -d mongo
 
