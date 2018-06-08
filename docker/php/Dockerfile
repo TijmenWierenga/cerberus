@@ -21,7 +21,6 @@ RUN chown -R  www-data /var/www
 
 COPY --chown=www-data bin ./bin
 COPY --chown=www-data config ./config
-COPY --chown=www-data keys ./keys
 COPY --chown=www-data public ./public
 COPY --chown=www-data src ./src
 COPY --chown=www-data translations ./translations
