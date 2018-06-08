@@ -11,6 +11,7 @@ env:
   DOCKER_COMPOSE_VERSION: 1.16.1
 
 before_install:
+  - sudo chmod 660 tests/private.test.key tests/public.test.key
   - docker-compose -f docker-compose.test.yml build
 
 script:
