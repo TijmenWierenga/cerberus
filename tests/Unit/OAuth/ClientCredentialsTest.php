@@ -37,7 +37,7 @@ class ClientCredentialsTest extends TestCase
         $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
         $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
-        $privateKey = new CryptKey(__DIR__ . '/../../../keys/private.key');
+        $privateKey = new CryptKey(__DIR__ . '/../../private.test.key');
         $server = new AuthorizationServer(
             $clientRepository,
             $accessTokenRepository,
@@ -65,7 +65,7 @@ class ClientCredentialsTest extends TestCase
         $this->assertRegExp("/^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-\+\/=]*)/", $body->access_token);
 
         $accessToken = $body->access_token;
-        $resourceServer = new ResourceServer($accessTokenRepository, new CryptKey(__DIR__ . '/../../../keys/public.key'));
+        $resourceServer = new ResourceServer($accessTokenRepository, new CryptKey(__DIR__ . '/../../public.test.key'));
         $request = (new ServerRequest())
             ->withHeader('Authorization', "{$body->token_type} {$accessToken}");
         $request = $resourceServer->validateAuthenticatedRequest($request);

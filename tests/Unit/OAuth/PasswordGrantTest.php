@@ -40,7 +40,7 @@ class PasswordGrantTest extends TestCase
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $userRepository = new InMemoryUserRepository(new ArrayCollection([$user]));
         $refreshTokenRepository = new InMemoryRefreshTokenRepository();
-        $privateKey = new CryptKey(__DIR__ . '/../../../keys/private.key');
+        $privateKey = new CryptKey(__DIR__ . '/../../private.test.key');
         $server = new AuthorizationServer(
             $clientRepository,
             $accessTokenRepository,
