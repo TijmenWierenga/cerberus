@@ -6,8 +6,8 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\RefreshToken;
-use Cerberus\Oauth\Repository\RefreshToken\InMemoryRefreshTokenRepository;
+use Cerberus\OAuth\RefreshToken;
+use Cerberus\OAuth\Repository\RefreshToken\InMemoryRefreshTokenRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

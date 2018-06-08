@@ -4,8 +4,8 @@ namespace Cerberus\Tests\Unit\OAuth\Repository\Scope;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use Cerberus\Oauth\Repository\Scope\InMemoryScopeRepository;
-use Cerberus\Oauth\Scope;
+use Cerberus\OAuth\Repository\Scope\InMemoryScopeRepository;
+use Cerberus\OAuth\Scope;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

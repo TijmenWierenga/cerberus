@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\Repository\User\InMemoryUserRepository;
-use Cerberus\Oauth\User;
+use Cerberus\OAuth\Repository\User\InMemoryUserRepository;
+use Cerberus\OAuth\User;
 
 class InMemoryUserRepositoryTest extends TestCase
 {

@@ -7,7 +7,7 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\Repository\AccessToken\InMemoryAccessTokenRepository;
+use Cerberus\OAuth\Repository\AccessToken\InMemoryAccessTokenRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
