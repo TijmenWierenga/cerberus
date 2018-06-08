@@ -14,3 +14,10 @@ RUN pecl install mongodb \
     && docker-php-ext-enable mongodb
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY --chown=www-data bin config keys public src /var/www/html/
+COPY --chown=www-data composer.json composer.lock /var/www/html/
+
+RUN composer install
+
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html/public"]
