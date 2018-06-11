@@ -4,7 +4,8 @@ services:
   server:
     image: cerberus/php:7.2
     build:
-      context: ./docker/php
+      context: .
+      dockerfile: ./docker/php/Dockerfile
       args:
         - USER_ID=${USER_ID}
     ports:

@@ -1,0 +1,20 @@
+sudo: required
+
+language: php
+php:
+  - '7.2'
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.16.1
+
+before_install:
+  - sudo chmod 660 tests/private.test.key tests/public.test.key
+  - docker-compose -f docker-compose.test.yml build
+
+script:
+  - docker run -it --rm cerberus/php:7.2 bin/phpunit --testsuite unit
+  - docker run -it --rm cerberus/php:7.2 vendor/bin/phpstan analyze src --level 7
+  - docker run -it --rm cerberus/php:7.2 vendor/bin/phpcs src --standard=PSR2

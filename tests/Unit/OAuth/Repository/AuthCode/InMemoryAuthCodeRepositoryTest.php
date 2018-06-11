@@ -5,7 +5,7 @@ namespace Cerberus\Tests\Unit\OAuth\Repository\AuthCode;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\Repository\AuthCode\InMemoryAuthCodeRepository;
+use Cerberus\OAuth\Repository\AuthCode\InMemoryAuthCodeRepository;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

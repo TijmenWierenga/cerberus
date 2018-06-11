@@ -7,8 +7,8 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPStan\Testing\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\AccessToken;
-use Cerberus\Oauth\Scope;
+use Cerberus\OAuth\AccessToken;
+use Cerberus\OAuth\Scope;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>

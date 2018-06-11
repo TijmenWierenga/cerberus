@@ -3,9 +3,13 @@ version: '3.3'
 services:
   functional_test:
     image: cerberus/php:7.2
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
+    user: www-data
     command: ["bin/phpunit", "--testsuite", "functional"]
 
   integration_test:
@@ -13,6 +17,7 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
+    user: www-data
     command: ["bin/phpunit", "--testsuite", "integration"]
 
   mongo:

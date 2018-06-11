@@ -4,8 +4,8 @@ namespace Cerberus\Tests\Unit\OAuth\Repository;
 
 use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Hasher\PlainTextHasher;
-use Cerberus\Oauth\Client;
-use Cerberus\Oauth\Repository\Client\InMemoryClientRepository;
+use Cerberus\OAuth\Client;
+use Cerberus\OAuth\Repository\Client\InMemoryClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use PHPUnit\Framework\TestCase;

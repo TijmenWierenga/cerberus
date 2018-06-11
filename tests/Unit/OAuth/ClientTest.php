@@ -5,7 +5,7 @@ namespace Cerberus\Tests\Unit\OAuth;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Cerberus\Oauth\Client;
+use Cerberus\OAuth\Client;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
