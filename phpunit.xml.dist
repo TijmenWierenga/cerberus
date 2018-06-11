@@ -20,6 +20,10 @@
         <env name="MONGODB_URL" value="mongodb://mongo:27017"/>
         <env name="MONGODB_DB" value="oauth"/>
         <!-- ###- doctrine/mongodb-odm-bundle ### -->
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost:?[0-9]*$"/>
+        <!-- ###- nelmio/cors-bundle ### -->
     </php>
 
     <testsuites>
