@@ -31,7 +31,7 @@ class UserTest extends TestCase
         ];
         $user = User::new(Uuid::uuid4(), 'john', 'a-password', $scopes);
 
-        $this->assertEmpty(array_diff($scopes, $user->getScopes()->toArray()));
+        $this->assertEmpty(array_diff($scopes, $user->getScopes()));
         $this->assertTrue($user->hasScope($first));
         $this->assertTrue($user->hasScope($second));
 
