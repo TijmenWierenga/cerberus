@@ -1,0 +1,12 @@
+Cerberus\OAuth\User:
+  fields:
+    id:
+      id: true
+      strategy: none
+      type: uuid
+    username:
+      type: string
+    password:
+      type: string
+    scopes:
+      type: collection
