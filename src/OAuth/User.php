@@ -26,7 +26,7 @@ class User implements UserEntityInterface, UserInterface
     private $password;
 
     /**
-     * @var ArrayCollection|ScopeEntityInterface[]
+     * @var ScopeEntityInterface[]
      */
     private $scopes;
 
@@ -35,7 +35,7 @@ class User implements UserEntityInterface, UserInterface
         $this->id = $id;
         $this->username = $username;
         $this->password = $password;
-        $this->scopes = new ArrayCollection($scopes);
+        $this->scopes = $scopes;
     }
 
     public static function new(UuidInterface $id, string $username, string $password, array $scopes = []): self
@@ -69,7 +69,10 @@ class User implements UserEntityInterface, UserInterface
         return $this->password;
     }
 
-    public function getScopes(): Collection
+    /**
+     * @return array|ScopeEntityInterface[]
+     */
+    public function getScopes(): array
     {
         return $this->scopes;
     }
@@ -80,7 +83,7 @@ class User implements UserEntityInterface, UserInterface
 
         foreach ($scopes as $scope) {
             if (! $this->hasScope($scope)) {
-                $this->scopes->add($scope);
+                $this->scopes[] = $scope;
             }
         }
     }
@@ -91,14 +94,18 @@ class User implements UserEntityInterface, UserInterface
 
         foreach ($scopes as $scope) {
             if ($this->hasScope($scope)) {
-                $this->scopes->removeElement($scope);
+                $key = array_search($scope, $this->scopes);
+
+                if (is_integer($key)) {
+                    unset($this->scopes[$key]);
+                }
             }
         }
     }
 
     public function hasScope(ScopeEntityInterface $scope): bool
     {
-        return $this->scopes->contains($scope);
+        return in_array($scope, $this->scopes);
     }
 
     /**
