@@ -20,7 +20,7 @@ interface UserRepositoryInterface extends OAuthUserRepositoryInterface
      * @param User $user
      * @param User ...$users
      */
-    public function save(User $user, User ...$users): void;
+    public function save(User $user, User ...$users): void; // TODO: Add a unique check
 
     /**
      * @param string $id

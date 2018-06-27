@@ -6,6 +6,7 @@ use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\Scope;
 use Cerberus\OAuth\User;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -45,7 +46,7 @@ abstract class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @depends testItSavesAndFindsAUser
+     * @depends testItSavesAndFindsAUser // TODO: This depends on state. Better to refactor this some day.
      */
     public function testItDeletesAUser(User $user)
     {
@@ -77,5 +78,22 @@ abstract class UserRepositoryTest extends KernelTestCase
         $this->assertNotContains($first, $result->getItems());
         $this->assertNotContains($second, $result->getItems());
         $this->assertContains($third, $result->getItems());
+    }
+
+    public function testItFindsAUserBasedOnUsernameAndPassword()
+    {
+        $user = User::new(Uuid::uuid4(), 'oauth', 'abc-not-so-safe');
+        $this->repository->save($user);
+
+        $client = $this->getMockBuilder(ClientEntityInterface::class)->getMock();
+
+        $result = $this->repository->getUserEntityByUserCredentials(
+            $user->getUsername(),
+            $user->getPassword(),
+            'password',
+            $client
+        );
+
+        $this->assertEquals($user, $result);
     }
 }
