@@ -34,4 +34,11 @@ interface UserRepositoryInterface extends OAuthUserRepositoryInterface
      * @return PaginatedCollection
      */
     public function findPaginated(int $page, int $perPage): PaginatedCollection;
+
+    /**
+     * @param string $username
+     * @return User
+     * @throws EntityNotFoundException
+     */
+    public function findByUsername(string $username): User;
 }
