@@ -6,6 +6,8 @@ Cerberus\OAuth\User:
       type: uuid
     username:
       type: string
+      index: true
+      unique: true
     password:
       type: string
     scopes:
