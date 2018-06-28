@@ -113,4 +113,22 @@ class InMemoryUserRepository implements UserRepositoryInterface
 
         return new PaginatedCollection($paginator->getCurrentPageResults(), $paginator);
     }
+
+    /**
+     * @param string $username
+     * @return User
+     * @throws EntityNotFoundException
+     */
+    public function findByUsername(string $username): User
+    {
+        $result = $this->collection->filter(function (User $user) use ($username) {
+            return $user->getUsername() === $username;
+        });
+
+        if ($result->isEmpty()) {
+            throw EntityNotFoundException::create(User::class, $username);
+        }
+
+        return $result->first();
+    }
 }

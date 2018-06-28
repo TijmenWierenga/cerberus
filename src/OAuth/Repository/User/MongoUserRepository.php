@@ -128,4 +128,21 @@ class MongoUserRepository implements UserRepositoryInterface
 
         return new PaginatedCollection($items, $this->paginator);
     }
+
+    /**
+     * @param string $username
+     * @return User
+     * @throws EntityNotFoundException
+     */
+    public function findByUsername(string $username): User
+    {
+        /** @var User|null $user */
+        $user = $this->repository->findOneBy(['username' => $username]);
+
+        if (! $user) {
+            throw EntityNotFoundException::create(User::class, $username);
+        }
+
+        return $user;
+    }
 }

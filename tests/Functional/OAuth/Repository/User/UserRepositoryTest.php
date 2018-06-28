@@ -25,38 +25,9 @@ abstract class UserRepositoryTest extends KernelTestCase
         $this->repository = $this->getRepository();
     }
 
-    public function testItSavesAndFindsAUser()
-    {
-        $user = User::new(Uuid::uuid4(), 'cerberus', 'abc-not-so-safe', [
-            new Scope('update_user')
-        ]);
-
-        $this->repository->save($user);
-
-        $this->assertEquals($user, $this->repository->find($user->getIdentifier()));
-
-        return $user;
-    }
-
-    public function testItThrowsNotFoundExceptionWhenUserCannotBeFound()
-    {
-        $this->expectException(EntityNotFoundException::class);
-
-        $this->repository->find(Uuid::uuid4()); // Random UUID
-    }
-
     /**
-     * @depends testItSavesAndFindsAUser // TODO: This depends on state. Better to refactor this some day.
+     * Should be the first test since it depends on the order in which the users appear
      */
-    public function testItDeletesAUser(User $user)
-    {
-        $this->expectException(EntityNotFoundException::class);
-
-        $this->repository->delete($user->getIdentifier());
-
-        $this->repository->find($user->getIdentifier());
-    }
-
     public function testItReturnsAPaginatedCollectionOfUsers()
     {
         [$first, $second, $third] = $result = [
@@ -80,6 +51,39 @@ abstract class UserRepositoryTest extends KernelTestCase
         $this->assertContains($third, $result->getItems());
     }
 
+    public function testItSavesAndFindsAUser()
+    {
+        $user = User::new(Uuid::uuid4(), 'cerberus', 'abc-not-so-safe', [
+            new Scope('update_user')
+        ]);
+
+        $this->repository->save($user);
+
+        $this->assertEquals($user, $result = $this->repository->find($user->getIdentifier()));
+
+        return $user;
+    }
+
+    public function testItThrowsNotFoundExceptionWhenUserCannotBeFound()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->repository->find(Uuid::uuid4()); // Random UUID
+    }
+
+    /**
+     * TODO: This depends on state. Better to refactor this some day.
+     * @depends testItSavesAndFindsAUser
+     */
+    public function testItDeletesAUser(User $user)
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->repository->delete($user->getIdentifier());
+
+        $this->repository->find($user->getIdentifier());
+    }
+
     public function testItFindsAUserBasedOnUsernameAndPassword()
     {
         $user = User::new(Uuid::uuid4(), 'oauth', 'abc-not-so-safe');
@@ -95,5 +99,22 @@ abstract class UserRepositoryTest extends KernelTestCase
         );
 
         $this->assertEquals($user, $result);
+    }
+
+    public function testItFindsAUserByUsername()
+    {
+        $user = User::new(Uuid::uuid4(), 'john', 'abc-not-so-safe');
+        $this->repository->save($user);
+
+        $result = $this->repository->findByUsername('john');
+
+        $this->assertEquals($user, $result);
+    }
+
+    public function testItFailsWhenUsernameDoesNotExistYet()
+    {
+        $this->expectException(EntityNotFoundException::class);
+
+        $this->repository->findByUsername('some-really-random-unexisting-username');
     }
 }
