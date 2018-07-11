@@ -2,8 +2,7 @@
 
 namespace Cerberus\OAuth\Service\User;
 
-use Cerberus\OAuth\Scope;
-use Ramsey\Uuid\UuidInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CreateUserRequest
 {
@@ -26,6 +25,13 @@ class CreateUserRequest
         $this->username = $username;
         $this->password = $password;
         $this->scopes = $scopes;
+    }
+
+    public static function fromRequest(ServerRequestInterface $request): self
+    {
+        $body = $request->getParsedBody();
+
+        return new self($body["username"], $body["password"], $body["scopes"]);
     }
 
     /**
