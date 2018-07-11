@@ -29,8 +29,7 @@ final class UserController extends BaseController
         ValidatorInterface $validator,
         Manager $transformer,
         PagerfantaPaginationAdapterFactory $paginationAdapterFactory
-    )
-    {
+    ) {
         $this->userService = $userService;
 
         parent::__construct($validator, $transformer, $paginationAdapterFactory);
