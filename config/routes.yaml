@@ -27,3 +27,8 @@ client_delete:
     path: /api/client/{id}
     methods: [DELETE]
     controller: Cerberus\Controller\ClientController::delete
+
+user_create:
+    path: /api/user
+    methods: [POST]
+    controller: Cerberus\Controller\UserController::create
