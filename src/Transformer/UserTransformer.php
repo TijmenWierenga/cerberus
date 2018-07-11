@@ -3,16 +3,23 @@
 namespace Cerberus\Transformer;
 
 use Cerberus\OAuth\User;
+use League\Fractal\Resource\Collection;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
 {
-    public function transform(User $user)
+    protected $defaultIncludes = ["scopes"];
+
+    public function transform(User $user): array
     {
         return [
             "id" => $user->getIdentifier(),
             "username" => $user->getUsername(),
-            "scopes" => $user->getScopes() // Fixme: Return collection of scopes with include and transformer
         ];
+    }
+
+    public function includeScopes(User $user): Collection
+    {
+        return new Collection($user->getScopes(), new ScopeTransformer());
     }
 }
