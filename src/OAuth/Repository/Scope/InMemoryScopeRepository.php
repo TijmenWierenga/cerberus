@@ -41,7 +41,7 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
             return $scope->getIdentifier() === $identifier;
         });
 
-        return $result->first();
+        return $result->first() ?: null;
     }
 
     /**
