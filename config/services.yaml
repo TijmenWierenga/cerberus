@@ -35,6 +35,7 @@ services:
     Cerberus\Hasher\HasherInterface: '@Cerberus\Hasher\ArgonPasswordHasher'
     Cerberus\OAuth\Repository\Client\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
     Cerberus\OAuth\Repository\User\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\MongoUserRepository'
+    Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\MongoScopeRepository'
     Cerberus\PropertyAccess\ObjectUpdaterInterface: '@Cerberus\PropertyAccess\ObjectUpdater'
 
     Cerberus\Security\Listener\OAuthListener:
