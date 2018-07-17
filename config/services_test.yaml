@@ -11,3 +11,4 @@ services:
     # test.App\Service\MyService: '@App\Service\MyService'
     test.Cerberus\OAuth\Repository\Client\MongoClientRepository: '@Cerberus\OAuth\Repository\Client\MongoClientRepository'
     test.Cerberus\OAuth\Repository\User\MongoUserRepository: '@Cerberus\OAuth\Repository\User\MongoUserRepository'
+    test.Cerberus\OAuth\Repository\Scope\MongoScopeRepository: '@Cerberus\OAuth\Repository\Scope\MongoScopeRepository'
