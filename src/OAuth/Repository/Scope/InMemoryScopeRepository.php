@@ -2,11 +2,12 @@
 
 namespace Cerberus\OAuth\Repository\Scope;
 
+use Cerberus\Exception\EntityNotFoundException;
+use Cerberus\OAuth\Scope;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
 /**
  * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
@@ -61,5 +62,27 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
         $userIdentifier = null
     ) {
         return $scopes;
+    }
+
+    public function save(Scope $scope, Scope ...$scopes): void
+    {
+        array_unshift($scopes, $scope);
+
+        foreach ($scopes as $scope) {
+            if (! $this->collection->contains($scope)) {
+                $this->collection->add($scope);
+            }
+        }
+    }
+
+    public function delete(string $identifier): void
+    {
+        $scope = $this->getScopeEntityByIdentifier($identifier);
+
+        if (! $scope) {
+            throw EntityNotFoundException::create(Scope::class, $identifier);
+        }
+
+        $this->collection->removeElement($scope);
     }
 }
