@@ -61,6 +61,8 @@ abstract class ScopeRepositoryTest extends KernelTestCase
         ?User $user,
         array $allowedGrants
     ) {
+        $this->markTestSkipped("Finalizing scopes still needs to be implemented");
+
         $requestedScopes = [
             new Scope("client_create"),
             new Scope ("client_remove"),
@@ -79,7 +81,7 @@ abstract class ScopeRepositoryTest extends KernelTestCase
                 "client_credentials",
                 Client::new(Uuid::uuid4(), "test", "test", ["https://redirect.me"]),
                 null,
-
+                [] // TODO: Set allowed grants
             ]
         ];
     }
