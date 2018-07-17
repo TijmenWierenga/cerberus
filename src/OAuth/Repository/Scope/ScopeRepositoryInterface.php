@@ -8,5 +8,5 @@ use League\OAuth2\Server\Repositories\ScopeRepositoryInterface as OAuthScopeRepo
 interface ScopeRepositoryInterface extends OAuthScopeRepositoryInterface
 {
     public function save(Scope $scope, Scope ...$scopes): void;
-    public function delete(Scope $scope, Scope ...$scopes): void;
+    public function delete(string $identifier): void;
 }
