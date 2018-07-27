@@ -2,6 +2,7 @@
 
 namespace Cerberus\Tests\Unit\OAuth;
 
+use Cerberus\OAuth\Scope;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -116,6 +117,22 @@ class ClientTest extends TestCase
         $client->removeAllowedGrantType(...$toRemove);
 
         $this->assertTrue(! array_diff($expectedGrants, $client->getAllowedGrantTypes()));
+    }
+
+    public function testItCanAddAndRemoveAScopeToAClient()
+    {
+        $client = Client::new(Uuid::uuid4(), 'test-client', 'secret', ['https://redirect.com']);
+        $scope = new Scope("user_create");
+
+        $this->assertFalse($client->hasScope($scope));
+
+        $client->addScope($scope);
+
+        $this->assertTrue($client->hasScope($scope));
+
+        $client->removeScope($scope);
+
+        $this->assertFalse($client->hasScope($scope));
     }
 
     public function removeGrantsDataProvider(): array

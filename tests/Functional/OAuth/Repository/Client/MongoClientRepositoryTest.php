@@ -43,12 +43,14 @@ class MongoClientRepositoryTest extends KernelTestCase
      */
     public function testItFindsAClientAndValidatesCredentials(Client $client)
     {
-        $this->assertEquals($client, $this->repository->getClientEntity(
+        $result = $this->repository->getClientEntity(
             $client->getIdentifier(),
             'password',
             'a-secret',
             true
-        ));
+        );
+
+        $this->assertEquals($client->getIdentifier(), $result->getIdentifier());
     }
 
     /**
@@ -56,7 +58,10 @@ class MongoClientRepositoryTest extends KernelTestCase
      */
     public function testItFindsAClient(Client $client)
     {
-        $this->assertEquals($client, $this->repository->find($client->getIdentifier()));
+        $this->assertEquals(
+            $client->getIdentifier(),
+            $this->repository->find($client->getIdentifier())->getIdentifier()
+        );
 
         return $client;
     }

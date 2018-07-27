@@ -2,7 +2,10 @@
 
 namespace Cerberus\OAuth;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -30,6 +33,10 @@ class Client implements ClientEntityInterface
      * @var string[]
      */
     private $allowedGrantTypes;
+    /**
+     * @var Collection
+     */
+    private $scopes;
 
     /**
      * Client constructor.
@@ -50,6 +57,7 @@ class Client implements ClientEntityInterface
         $this->redirectUris = $redirectUris;
         $this->clientSecret = $clientSecret;
         $this->allowedGrantTypes = $allowedGrantTypes;
+        $this->scopes = new ArrayCollection();
     }
 
     public static function new(
@@ -177,6 +185,25 @@ class Client implements ClientEntityInterface
             if (is_integer($key)) {
                 unset($this->allowedGrantTypes[$key]);
             }
+        }
+    }
+
+    public function addScope(ScopeEntityInterface $scope): void
+    {
+        if (! $this->hasScope($scope)) {
+            $this->scopes->add($scope);
+        }
+    }
+
+    public function hasScope(ScopeEntityInterface $scope): bool
+    {
+        return $this->scopes->contains($scope);
+    }
+
+    public function removeScope(ScopeEntityInterface $scope): void
+    {
+        if ($this->hasScope($scope)) {
+            $this->scopes->removeElement($scope);
         }
     }
 }

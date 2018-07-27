@@ -21,4 +21,11 @@ class UuidType extends Type
     {
         return Uuid::fromString($id);
     }
+
+    public function closureToPHP()
+    {
+        // Return the string body of a PHP closure that will receive $value
+        // and store the result of a conversion in a $return variable
+        return '$return = \Ramsey\Uuid\Uuid::fromString($value);';
+    }
 }
