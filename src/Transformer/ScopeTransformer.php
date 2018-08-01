@@ -9,6 +9,8 @@ class ScopeTransformer extends TransformerAbstract
 {
     public function transform(Scope $scope)
     {
-        return $scope->getIdentifier();
+        return [
+            "id" => $scope->getIdentifier()
+        ];
     }
 }
