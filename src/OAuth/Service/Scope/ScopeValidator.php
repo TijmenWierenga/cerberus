@@ -21,7 +21,7 @@ class ScopeValidator
      * @param array $scopes
      * @param string $grantType
      * @param Client $client
-     * @param string $userIdentifier
+     * @param string|null $userIdentifier
      * @return array  A validated list of scopes
      */
     public function validateScopes(array $scopes, string $grantType, Client $client, ?string $userIdentifier): array
