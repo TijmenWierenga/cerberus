@@ -6,13 +6,12 @@ use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Exception\IllegalScopeException;
 use Cerberus\Exception\User\UsernameAlreadyTakenException;
 use Cerberus\Hasher\HasherInterface;
+use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\Scope;
 use Cerberus\OAuth\Service\User\CreateUserRequest;
 use Cerberus\OAuth\Service\User\UserService;
 use Cerberus\OAuth\User;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 
