@@ -29,45 +29,80 @@ class ScopeValidatorTest extends TestCase
         $userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $validator = new ScopeValidator($userRepository);
 
-        $userRepository->expects($this->once())
-            ->method("find")
-            ->with($user->getIdentifier())
-            ->willReturn($user);
+        if ($user) {
+            $userRepository->expects($this->once())
+                ->method("find")
+                ->with($user->getIdentifier())
+                ->willReturn($user);
+        }
 
-        $result = $validator->validateScopes($requestedScopes, $grantType, $client, $user->getIdentifier());
+        $userId = $user ? $user->getIdentifier() : null;
+
+        $result = $validator->validateScopes($requestedScopes, $grantType, $client, $userId);
 
         $this->assertEquals($finalScopes, $result);
     }
 
     public function scopeDataProvider(): array
     {
+        $userCreateScope = new Scope("user_create");
+        $userUpdateScope = new Scope("user_update");
         return [
             [
-                $this->generateScopes("user_create", "user_update"),
-                $this->generateClient("user_create"),
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope),
                 "password",
-                $this->generateUser("user_create"),
-                [new Scope("user_create")]
-            ]
+                $this->generateUser($userCreateScope),
+                [$userCreateScope]
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope),
+                "password",
+                $this->generateUser($userCreateScope, $userUpdateScope),
+                [$userCreateScope]
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope),
+                "password",
+                $this->generateUser($userUpdateScope),
+                []
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope, $userUpdateScope),
+                "password",
+                $this->generateUser($userCreateScope, $userUpdateScope),
+                [$userCreateScope, $userUpdateScope]
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope, $userUpdateScope),
+                "client_credentials",
+                null,
+                [$userCreateScope, $userUpdateScope]
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient($userCreateScope),
+                "client_credentials",
+                null,
+                [$userCreateScope]
+            ],
+            [
+                [$userCreateScope, $userUpdateScope],
+                $this->generateClient(),
+                "client_credentials",
+                null,
+                []
+            ],
         ];
     }
 
-    private function generateScopes(string ...$scopes): array
-    {
-        foreach ($scopes as $scope) {
-            $this->scopes[] = new Scope($scope);
-        }
-
-        return $this->scopes;
-    }
-
-    private function generateClient(string ...$scopes): Client
+    private function generateClient(Scope ...$scopes): Client
     {
         $client = Client::new(Uuid::uuid4(), "test", "test", ["https://test.com"]);
-
-        $scopes = array_filter($this->scopes, function (Scope $scope) use ($scopes) {
-            return in_array($scope->getIdentifier(), $scopes);
-        });
 
         foreach ($scopes as $scope) {
             $client->addScope($scope);
@@ -76,13 +111,9 @@ class ScopeValidatorTest extends TestCase
         return $client;
     }
 
-    private function generateUser(string ...$scopes): User
+    private function generateUser(Scope ...$scopes): User
     {
         $user = User::new(Uuid::uuid4(), "test", "test");
-
-        $scopes = array_filter($this->scopes, function (Scope $scope) use ($scopes) {
-            return in_array($scope->getIdentifier(), $scopes);
-        });
 
         foreach ($scopes as $scope) {
             $user->addScope($scope);
