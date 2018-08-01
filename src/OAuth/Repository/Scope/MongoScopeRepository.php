@@ -3,7 +3,9 @@
 namespace Cerberus\OAuth\Repository\Scope;
 
 use Cerberus\Exception\EntityNotFoundException;
+use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Scope;
+use Cerberus\OAuth\Service\Scope\ScopeValidator;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -21,10 +23,16 @@ class MongoScopeRepository implements ScopeRepositoryInterface
      */
     private $repository;
 
-    public function __construct(DocumentManager $manager)
+    /**
+     * @var ScopeValidator
+     */
+    private $scopeValidator;
+
+    public function __construct(DocumentManager $manager, ScopeValidator $scopeValidator)
     {
         $this->manager = $manager;
         $this->repository = $this->manager->getRepository('Cerberus:Scope');
+        $this->scopeValidator = $scopeValidator;
     }
 
     public function save(Scope $scope, Scope ...$scopes): void
@@ -59,7 +67,7 @@ class MongoScopeRepository implements ScopeRepositoryInterface
      *
      * @param ScopeEntityInterface[] $scopes
      * @param string $grantType
-     * @param ClientEntityInterface $clientEntity
+     * @param Client $clientEntity
      * @param null|string $userIdentifier
      *
      * @return ScopeEntityInterface[]
@@ -70,8 +78,7 @@ class MongoScopeRepository implements ScopeRepositoryInterface
         ClientEntityInterface $clientEntity,
         $userIdentifier = null
     ) {
-        // TODO: Implement finalizeScopes() method.
-        return $scopes;
+        return $this->scopeValidator->validateScopes($scopes, $grantType, $clientEntity, $userIdentifier);
     }
 
     public function delete(string $identifier): void
