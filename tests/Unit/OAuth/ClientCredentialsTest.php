@@ -3,6 +3,8 @@
 namespace TijmenWierengaCerberus;
 
 use Cerberus\Hasher\PlainTextHasher;
+use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
+use Cerberus\OAuth\Service\Scope\ScopeValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
@@ -30,12 +32,15 @@ class ClientCredentialsTest extends TestCase
      */
     public function testItExchangesClientCredentialsForAnAccessToken()
     {
-        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
-        $client->addAllowedGrantType('client_credentials');
         $scope = new Scope("test");
         $scope2 = new Scope("god");
+        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
+        $client->addAllowedGrantType('client_credentials');
+        $client->addScope($scope);
+        $client->addScope($scope2);
         $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
-        $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
+        $scopeValidator = new ScopeValidator($this->getMockBuilder(UserRepositoryInterface::class)->getMock());
+        $scopeRepository = new InMemoryScopeRepository($scopeValidator, new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $privateKey = new CryptKey(__DIR__ . '/../../private.test.key');
         $server = new AuthorizationServer(
