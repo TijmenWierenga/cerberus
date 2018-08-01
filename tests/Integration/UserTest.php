@@ -2,13 +2,18 @@
 
 namespace Cerberus\Tests\Integration;
 
+use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
+use Cerberus\OAuth\Scope;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\VarDumper\VarDumper;
 
 class UserTest extends BaseTest
 {
     public function testUserCreate()
     {
+        /** @var ScopeRepositoryInterface $scopeRepository */
+        $scopeRepository = self::$container->get('test.' . ScopeRepositoryInterface::class);
+        $scopeRepository->save(new Scope('client_create'));
+
         $this->loginWithScopes('user_create');
 
         $this->client->request('POST', '/api/user', [
@@ -20,7 +25,6 @@ class UserTest extends BaseTest
         ]);
 
         $response = $this->client->getResponse();
-        VarDumper::dump($response);
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
     }
 }
