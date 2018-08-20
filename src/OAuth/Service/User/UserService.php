@@ -8,7 +8,7 @@ use Cerberus\Exception\User\UsernameAlreadyTakenException;
 use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\User;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 
 class UserService

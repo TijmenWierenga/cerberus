@@ -3,6 +3,8 @@
 namespace Cerberus\Tests\Unit\OAuth;
 
 use Cerberus\Hasher\PlainTextHasher;
+use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
+use Cerberus\OAuth\Service\Scope\ScopeValidator;
 use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\OAuth2\Server\AuthorizationServer;
@@ -30,13 +32,18 @@ class PasswordGrantTest extends TestCase
      */
     public function testItExchangesAUsernameAndPasswordForAnAccessToken()
     {
-        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
-        $client->addAllowedGrantType('password');
         $scope = new Scope("test");
         $scope2 = new Scope("god");
+        $client = Client::new(Uuid::uuid4(), 'test-client', '12345678', ['https://www.test.me']);
+        $client->addAllowedGrantType('password');
+        $client->addScope($scope);
+        $client->addScope($scope2);
         $user = User::new(Uuid::uuid4(), 'tijmen', 'password');
+        $user->addScope($scope);
+        $user->addScope($scope2);
         $clientRepository = new InMemoryClientRepository(new PlainTextHasher(), new ArrayCollection([$client]));
-        $scopeRepository = new InMemoryScopeRepository(new ArrayCollection([$scope, $scope2]));
+        $scopeValidator = new ScopeValidator($this->getMockBuilder(UserRepositoryInterface::class)->getMock());
+        $scopeRepository = new InMemoryScopeRepository($scopeValidator, new ArrayCollection([$scope, $scope2]));
         $accessTokenRepository = new InMemoryAccessTokenRepository();
         $userRepository = new InMemoryUserRepository(new ArrayCollection([$user]));
         $refreshTokenRepository = new InMemoryRefreshTokenRepository();

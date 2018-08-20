@@ -31,6 +31,6 @@ ENV MONGODB_URL=mongodb://mongo:27017
 ENV MONGODB_DB=oauth
 
 USER www-data
-RUN APP_ENV=dev composer install
+RUN APP_ENV=dev composer install --no-scripts
 
 CMD ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html/public"]

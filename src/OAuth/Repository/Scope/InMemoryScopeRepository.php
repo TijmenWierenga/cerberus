@@ -3,7 +3,9 @@
 namespace Cerberus\OAuth\Repository\Scope;
 
 use Cerberus\Exception\EntityNotFoundException;
+use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Scope;
+use Cerberus\OAuth\Service\Scope\ScopeValidator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -18,14 +20,19 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
      * @var Collection
      */
     private $collection;
+    /**
+     * @var ScopeValidator
+     */
+    private $scopeValidator;
 
     /**
      * InMemoryScopeRepository constructor.
      * @param Collection $collection
      */
-    public function __construct(Collection $collection = null)
+    public function __construct(ScopeValidator $scopeValidator, Collection $collection = null)
     {
         $this->collection = $collection ?? new ArrayCollection();
+        $this->scopeValidator = $scopeValidator;
     }
 
     /**
@@ -50,7 +57,7 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
      *
      * @param ScopeEntityInterface[] $scopes
      * @param string $grantType
-     * @param ClientEntityInterface $clientEntity
+     * @param Client $clientEntity
      * @param null|string $userIdentifier
      *
      * @return ScopeEntityInterface[]
@@ -61,7 +68,7 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
         ClientEntityInterface $clientEntity,
         $userIdentifier = null
     ) {
-        return $scopes;
+        return $this->scopeValidator->validateScopes($scopes, $grantType, $clientEntity, $userIdentifier);
     }
 
     public function save(Scope $scope, Scope ...$scopes): void
