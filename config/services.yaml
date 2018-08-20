@@ -51,7 +51,7 @@ services:
 
     League\OAuth2\Server\Repositories\ClientRepositoryInterface: '@Cerberus\OAuth\Repository\Client\ClientRepositoryInterface'
     League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface: '@Cerberus\OAuth\Repository\AccessToken\InMemoryAccessTokenRepository'
-    League\OAuth2\Server\Repositories\ScopeRepositoryInterface: 'Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface'
+    League\OAuth2\Server\Repositories\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface'
     League\OAuth2\Server\Repositories\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\UserRepositoryInterface'
     League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface: '@Cerberus\OAuth\Repository\RefreshToken\InMemoryRefreshTokenRepository'
 
