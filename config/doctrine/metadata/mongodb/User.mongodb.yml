@@ -10,5 +10,6 @@ Cerberus\OAuth\User:
       unique: true
     password:
       type: string
+  referenceMany:
     scopes:
-      type: collection
+      targetDocument: Cerberus\OAuth\Scope
