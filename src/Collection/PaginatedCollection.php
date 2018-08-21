@@ -10,15 +10,10 @@ class PaginatedCollection
      * @var Pagerfanta
      */
     private $paginator;
-    /**
-     * @var iterable
-     */
-    private $items;
 
-    public function __construct(iterable $items, Pagerfanta $paginator)
+    public function __construct(Pagerfanta $paginator)
     {
         $this->paginator = $paginator;
-        $this->items = $items;
     }
 
     /**
@@ -34,6 +29,6 @@ class PaginatedCollection
      */
     public function getItems(): iterable
     {
-        return $this->items;
+        return $this->paginator->getCurrentPageResults();
     }
 }

@@ -108,7 +108,7 @@ class InMemoryClientRepository implements ClientRepositoryInterface
         $paginator->setMaxPerPage($perPage);
         $paginator->setCurrentPage($page);
 
-        return new PaginatedCollection($paginator->getCurrentPageResults(), $paginator);
+        return new PaginatedCollection($paginator);
     }
 
     /**
