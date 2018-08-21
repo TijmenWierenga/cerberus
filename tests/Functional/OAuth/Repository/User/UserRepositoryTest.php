@@ -69,15 +69,18 @@ abstract class UserRepositoryTest extends KernelTestCase
         $this->repository->find(Uuid::uuid4()); // Random UUID
     }
 
-    /**
-     * TODO: This depends on state. Better to refactor this some day.
-     * @depends testItSavesAndFindsAUser
-     */
-    public function testItDeletesAUser(User $user)
+    public function testItDeletesAUser()
     {
         $this->expectException(EntityNotFoundException::class);
 
-        $this->repository->delete($user->getIdentifier());
+        $user = User::new(Uuid::uuid4(), "test-user", "test-password");
+        $this->repository->save($user);
+
+        try {
+            $this->repository->delete($user->getIdentifier());
+        } catch (EntityNotFoundException $e) {
+            $this->fail("User did not exist on removal");
+        }
 
         $this->repository->find($user->getIdentifier());
     }
