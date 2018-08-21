@@ -9,6 +9,8 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
+    environment:
+      - APP_ENV=test
     user: www-data
     command: ["bin/phpunit", "--testsuite", "functional"]
 
@@ -17,6 +19,8 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
+    environment:
+      - APP_ENV=test
     user: www-data
     command: ["bin/phpunit", "--testsuite", "integration"]
 
