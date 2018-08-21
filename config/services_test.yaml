@@ -13,3 +13,4 @@ services:
     test.Cerberus\OAuth\Repository\User\MongoUserRepository: '@Cerberus\OAuth\Repository\User\MongoUserRepository'
     test.Cerberus\OAuth\Repository\Scope\MongoScopeRepository: '@Cerberus\OAuth\Repository\Scope\MongoScopeRepository'
     test.Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface: '@Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface'
+    test.Cerberus\OAuth\Repository\User\UserRepositoryInterface: '@Cerberus\OAuth\Repository\User\UserRepositoryInterface'
