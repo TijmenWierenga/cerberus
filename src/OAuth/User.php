@@ -132,6 +132,13 @@ class User implements UserEntityInterface, UserInterface
         return $roles;
     }
 
+    public function hasRole(Role $role): bool
+    {
+        return count(array_filter($this->getRoles(), function (Role $userRole) use ($role) {
+            return $userRole->getRole() === $role->getRole();
+        })) > 0;
+    }
+
     /**
      * Returns the salt that was originally used to encode the password.
      *
