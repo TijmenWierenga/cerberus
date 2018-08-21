@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        - USER_ID=${USER_ID}
+    volumes:
+      - .:/var/www/html
