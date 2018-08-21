@@ -1,6 +1,6 @@
 init: keys build server
 build:
-	UID=$$(id -u) docker-compose build
+	UID=$$(id -u) docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
 	docker volume create --driver local mongo-data
 keys:
 	mkdir keys
@@ -8,9 +8,9 @@ keys:
 	openssl rsa -in keys/private.key -pubout -out keys/public.key
 	chmod 660 keys/private.key keys/public.key
 server:
-	USER_ID=$$(id -u) docker-compose up -d
+	USER_ID=$$(id -u) docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 stop:
-	USER_ID=$$(id -u) docker-compose down
+	USER_ID=$$(id -u) docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
 unit-test:
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 bin/phpunit --testsuite unit
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpstan analyze src --level 7
