@@ -3,16 +3,8 @@ version: '3.3'
 services:
   server:
     image: cerberus/php:7.2
-    build:
-      context: .
-      dockerfile: ./docker/php/Dockerfile
-      args:
-        - USER_ID=${USER_ID}
     ports:
       - 8080:8080
-    volumes:
-      - .:/var/www/html
-    command: ["php", "-S", "0.0.0.0:8080", "-t", "/var/www/html/public"]
 
   mongo:
     image: mongo:3
