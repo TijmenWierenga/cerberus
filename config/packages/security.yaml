@@ -23,4 +23,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/client, methods: ["GET"], roles: ROLE_CLIENT_READ }
+         - { path: ^/api/client, methods: ["PUT"], roles: ROLE_CLIENT_UPDATE }
+         - { path: ^/api/client, methods: ["DELETE"], roles: ROLE_CLIENT_DELETE }
+         - { path: ^/api/client, methods: ["POST"], roles: ROLE_CLIENT_CREATE }
+         - { path: ^/api/user, methods: ["POST"], roles: ROLE_USER_CREATE }
