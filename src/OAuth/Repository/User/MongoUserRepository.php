@@ -4,30 +4,43 @@ namespace Cerberus\OAuth\Repository\User;
 
 use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Exception\EntityNotFoundException;
+use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\User;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
-use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Adapter\DoctrineODMMongoDBAdapter;
 use Pagerfanta\Pagerfanta;
 
-class InMemoryUserRepository implements UserRepositoryInterface
+class MongoUserRepository implements UserRepositoryInterface
 {
     /**
-     * @var Collection
+     * @var DocumentManager
      */
-    private $collection;
-
+    private $manager;
     /**
-     * InMemoryUserRepository constructor.
-     * @param Collection $collection
+     * @var HasherInterface
      */
-    public function __construct(Collection $collection = null)
-    {
-        $this->collection = $collection ?? new ArrayCollection();
-    }
+    private $hasher;
+    /**
+     * @var ObjectRepository
+     */
+    private $repository;
+    /**
+     * @var Pagerfanta
+     */
+    private $paginator;
 
+    public function __construct(DocumentManager $manager, HasherInterface $hasher)
+    {
+        $this->manager = $manager;
+        $this->hasher = $hasher;
+        $this->repository = $this->manager->getRepository('Cerberus:User');
+        $queryBuilder = $this->manager->createQueryBuilder('Cerberus:User');
+        $mongoAdapter = new DoctrineODMMongoDBAdapter($queryBuilder);
+        $this->paginator = new Pagerfanta($mongoAdapter);
+    }
 
     /**
      * Get a user entity.
@@ -45,15 +58,18 @@ class InMemoryUserRepository implements UserRepositoryInterface
         $grantType,
         ClientEntityInterface $clientEntity
     ) {
-        $result = $this->collection->filter(function (User $user) use ($username, $password) {
-             return ($user->getUsername() === $username && $user->getPassword() === $password);
-        });
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['username' => $username]);
 
-        if ($result->isEmpty()) {
+        if (! $user) {
             return false;
         }
 
-        return $result->first();
+        if (! $this->hasher->verify($password, $user->getPassword())) {
+            return false;
+        }
+
+        return $user;
     }
 
     /**
@@ -63,30 +79,28 @@ class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function find(string $id): User
     {
-        $result = $this->collection->filter(function (User $user) use ($id) {
-            return $user->getIdentifier() === $id;
-        })->first();
+        /** @var User $user */
+        $user = $this->repository->find($id);
 
-        if (! $result) {
+        if (! $user) {
             throw EntityNotFoundException::create(User::class, $id);
         }
 
-        return $result;
+        return $user;
     }
 
     /**
      * @param User $user
-     * @param User ...$users
      */
     public function save(User $user, User ...$users): void
     {
         array_unshift($users, $user);
 
         foreach ($users as $user) {
-            if (! $this->collection->contains($user)) {
-                $this->collection->add($user);
-            }
+            $this->manager->persist($user);
         }
+
+        $this->manager->flush();
     }
 
     /**
@@ -97,7 +111,8 @@ class InMemoryUserRepository implements UserRepositoryInterface
     {
         $user = $this->find($id);
 
-        $this->collection->removeElement($user);
+        $this->manager->remove($user);
+        $this->manager->flush();
     }
 
     /**
@@ -107,11 +122,10 @@ class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function findPaginated(int $page, int $perPage): PaginatedCollection
     {
-        $paginator = new Pagerfanta(new ArrayAdapter($this->collection->toArray()));
-        $paginator->setMaxPerPage($perPage);
-        $paginator->setCurrentPage($page);
+        $this->paginator->setMaxPerPage($perPage);
+        $this->paginator->setCurrentPage($page);
 
-        return new PaginatedCollection($paginator);
+        return new PaginatedCollection($this->paginator);
     }
 
     /**
@@ -121,14 +135,13 @@ class InMemoryUserRepository implements UserRepositoryInterface
      */
     public function findByUsername(string $username): User
     {
-        $result = $this->collection->filter(function (User $user) use ($username) {
-            return $user->getUsername() === $username;
-        });
+        /** @var User|null $user */
+        $user = $this->repository->findOneBy(['username' => $username]);
 
-        if ($result->isEmpty()) {
+        if (! $user) {
             throw EntityNotFoundException::create(User::class, $username);
         }
 
-        return $result->first();
+        return $user;
     }
 }

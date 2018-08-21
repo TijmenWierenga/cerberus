@@ -12,3 +12,6 @@ Cerberus\OAuth\Client:
       type: collection
     allowedGrantTypes:
       type: collection
+  referenceMany:
+    scopes:
+      targetDocument: Cerberus\OAuth\Scope

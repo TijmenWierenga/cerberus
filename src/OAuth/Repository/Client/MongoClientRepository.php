@@ -102,9 +102,8 @@ class MongoClientRepository implements ClientRepositoryInterface
     {
         $this->paginator->setMaxPerPage($perPage);
         $this->paginator->setCurrentPage($page);
-        $items = $this->paginator->getCurrentPageResults();
 
-        return new PaginatedCollection($items, $this->paginator);
+        return new PaginatedCollection($this->paginator);
     }
 
     /**

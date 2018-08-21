@@ -6,33 +6,44 @@ use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\OAuth\Client;
 use Cerberus\OAuth\Scope;
 use Cerberus\OAuth\Service\Scope\ScopeValidator;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 
-/**
- * @author Tijmen Wierenga <tijmen.wierenga@devmob.com>
- */
-class InMemoryScopeRepository implements ScopeRepositoryInterface
+class MongoScopeRepository implements ScopeRepositoryInterface
 {
     /**
-     * @var Collection
+     * @var DocumentManager
      */
-    private $collection;
+    private $manager;
+
+    /**
+     * @var ObjectRepository
+     */
+    private $repository;
+
     /**
      * @var ScopeValidator
      */
     private $scopeValidator;
 
-    /**
-     * InMemoryScopeRepository constructor.
-     * @param Collection $collection
-     */
-    public function __construct(ScopeValidator $scopeValidator, Collection $collection = null)
+    public function __construct(DocumentManager $manager, ScopeValidator $scopeValidator)
     {
-        $this->collection = $collection ?? new ArrayCollection();
+        $this->manager = $manager;
+        $this->repository = $this->manager->getRepository('Cerberus:Scope');
         $this->scopeValidator = $scopeValidator;
+    }
+
+    public function save(Scope $scope, Scope ...$scopes): void
+    {
+        array_unshift($scopes, $scope);
+
+        foreach ($scopes as $scope) {
+            $this->manager->persist($scope);
+        }
+
+        $this->manager->flush();
     }
 
     /**
@@ -40,20 +51,19 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
      *
      * @param string $identifier The scope identifier
      *
-     * @return ScopeEntityInterface|false
+     * @return ScopeEntityInterface
      */
     public function getScopeEntityByIdentifier($identifier)
     {
-        $result = $this->collection->filter(function (ScopeEntityInterface $scope) use ($identifier) {
-            return $scope->getIdentifier() === $identifier;
-        });
+        /** @var ScopeEntityInterface $scope */
+        $scope = $this->repository->find($identifier);
 
-        return $result->first() ?: null;
+        return $scope;
     }
 
     /**
-     * Given a client, grant type and optional user identifier validate the set of
-     * scopes requested are valid and optionally append additional scopes or remove requested scopes.
+     * Given a client, grant type and optional user identifier validate the set of scopes requested
+     * are valid and optionally append additional scopes or remove requested scopes.
      *
      * @param ScopeEntityInterface[] $scopes
      * @param string $grantType
@@ -71,17 +81,6 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
         return $this->scopeValidator->validateScopes($scopes, $grantType, $clientEntity, $userIdentifier);
     }
 
-    public function save(Scope $scope, Scope ...$scopes): void
-    {
-        array_unshift($scopes, $scope);
-
-        foreach ($scopes as $scope) {
-            if (! $this->collection->contains($scope)) {
-                $this->collection->add($scope);
-            }
-        }
-    }
-
     public function delete(string $identifier): void
     {
         $scope = $this->getScopeEntityByIdentifier($identifier);
@@ -90,6 +89,7 @@ class InMemoryScopeRepository implements ScopeRepositoryInterface
             throw EntityNotFoundException::create(Scope::class, $identifier);
         }
 
-        $this->collection->removeElement($scope);
+        $this->manager->remove($scope);
+        $this->manager->flush();
     }
 }

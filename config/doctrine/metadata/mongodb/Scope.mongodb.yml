@@ -1,0 +1,6 @@
+Cerberus\OAuth\Scope:
+  fields:
+    id:
+      id: true
+      strategy: none
+      type: string

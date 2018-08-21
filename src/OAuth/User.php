@@ -26,7 +26,7 @@ class User implements UserEntityInterface, UserInterface
     private $password;
 
     /**
-     * @var ArrayCollection|ScopeEntityInterface[]
+     * @var Collection|ScopeEntityInterface[]
      */
     private $scopes;
 
@@ -69,6 +69,9 @@ class User implements UserEntityInterface, UserInterface
         return $this->password;
     }
 
+    /**
+     * @return Collection|ScopeEntityInterface[]
+     */
     public function getScopes(): Collection
     {
         return $this->scopes;
@@ -127,6 +130,13 @@ class User implements UserEntityInterface, UserInterface
         }
 
         return $roles;
+    }
+
+    public function hasRole(Role $role): bool
+    {
+        return count(array_filter($this->getRoles(), function (Role $userRole) use ($role) {
+            return $userRole->getRole() === $role->getRole();
+        })) > 0;
     }
 
     /**

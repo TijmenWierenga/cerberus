@@ -1,0 +1,15 @@
+Cerberus\OAuth\User:
+  fields:
+    id:
+      id: true
+      strategy: none
+      type: uuid
+    username:
+      type: string
+      index: true
+      unique: true
+    password:
+      type: string
+  referenceMany:
+    scopes:
+      targetDocument: Cerberus\OAuth\Scope
