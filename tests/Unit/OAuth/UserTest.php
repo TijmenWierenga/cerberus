@@ -31,15 +31,13 @@ class UserTest extends TestCase
         ];
         $user = User::new(Uuid::uuid4(), 'john', 'a-password', $scopes);
 
-        $this->assertEmpty(array_diff($scopes, $user->getScopes()));
+        $this->assertCount(2, $user->getScopes());
         $this->assertTrue($user->hasScope($first));
         $this->assertTrue($user->hasScope($second));
 
-        $roles = array_map(function (Role $role) {
-            return $role->getRole();
-        }, $user->getRoles());
-
-        $this->assertEmpty(array_diff(['ROLE_CLIENT_CREATE', 'ROLE_CLIENT_UPDATE'], $roles));
+        $this->assertCount(2, $user->getRoles());
+        $this->assertTrue($user->hasRole(new Role("ROLE_CLIENT_CREATE")));
+        $this->assertTrue($user->hasRole(new Role("ROLE_CLIENT_UPDATE")));
     }
 
     public function testItAddsAScopeToAUser()

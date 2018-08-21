@@ -53,9 +53,7 @@ abstract class UserRepositoryTest extends KernelTestCase
 
     public function testItSavesAndFindsAUser()
     {
-        $user = User::new(Uuid::uuid4(), 'cerberus', 'abc-not-so-safe', [
-            new Scope('update_user')
-        ]);
+        $user = User::new(Uuid::uuid4(), 'cerberus', 'abc-not-so-safe');
 
         $this->repository->save($user);
 
