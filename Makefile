@@ -1,9 +1,13 @@
-init: keys build server
+init: keys app-key build server
 build:
-	UID=$$(id -u) docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+	USER_ID=$$(id -u) docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
 	docker volume create --driver local mongo-data
+app-key:
+	mkdir -p keys
+	cat /dev/urandom | env LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 > keys/app-key
+	chmod 660 keys/app-key
 keys:
-	mkdir keys
+	mkdir -p keys
 	openssl genrsa -out keys/private.key 2048
 	openssl rsa -in keys/private.key -pubout -out keys/public.key
 	chmod 660 keys/private.key keys/public.key
