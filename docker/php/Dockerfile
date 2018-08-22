@@ -18,8 +18,6 @@ COPY --from=composer:latest --chown=www-data /usr/bin/composer /usr/bin/composer
 COPY --chown=www-data composer.json composer.lock /var/www/html/
 
 ENV APP_ENV=prod
-# Fixme: Use a runtime mounted secret or find another solution to not hardcode this value
-ENV APP_SECRET=6e31035c5054fb1c253567b2e6bb467b
 ENV MONGODB_URL=mongodb://mongo:27017
 ENV MONGODB_DB=oauth
 ENV CORS_ALLOW_ORIGIN=^https?://localhost:?[0-9]*$
