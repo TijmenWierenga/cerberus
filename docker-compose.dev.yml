@@ -7,5 +7,7 @@ services:
       dockerfile: ./docker/php/Dockerfile
       args:
         - USER_ID=${USER_ID}
+    environment:
+      - APP_ENV=dev
     volumes:
       - .:/var/www/html
