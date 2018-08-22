@@ -20,16 +20,16 @@ unit-test:
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpstan analyze src --level 7
 	docker run -it --rm -v $$(pwd):/var/www/html -w /var/www/html cerberus/php:7.2 vendor/bin/phpcs src --standard=PSR2
 functional-test:
-	docker-compose -f docker-compose.test.yml up -d mongo
-	-docker-compose -f docker-compose.test.yml run functional_test
-	docker-compose -f docker-compose.test.yml down --volumes
+	COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml up -d mongo
+	-COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml run functional_test
+	COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml down --volumes
 integration-test:
-	docker-compose -f docker-compose.test.yml up -d mongo
-	-docker-compose -f docker-compose.test.yml run integration_test
-	docker-compose -f docker-compose.test.yml down --volumes
+	COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml up -d mongo
+	-COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml run integration_test
+	COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml down --volumes
 test: unit-test functional-test integration-test
 create_client:
 	docker-compose run -w /var/www/html server bin/console oauth:client:create default -g password -g refresh_token -g auth_code -g client_credentials -g implicit https://www.tijmenwierenga.nl/callback
 
-.SILENT: keys server unit-test functional-test integration-test init build stop create_client test
+.SILENT: keys server unit-test functional-test integration-test init build stop create_client test app-key
 .PHONY: server test
