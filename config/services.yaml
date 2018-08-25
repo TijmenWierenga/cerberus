@@ -3,6 +3,8 @@
 parameters:
     privateKey: '%kernel.project_dir%/keys/private.key'
     publicKey: '%kernel.project_dir%/keys/public.key'
+    env(KEY_FILE): '%kernel.project_dir%/keys/app-key'
+    app_secret: '%env(file:KEY_FILE)%'
     locale: 'en'
 
 services:

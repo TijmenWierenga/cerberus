@@ -8,16 +8,16 @@ services:
       dockerfile: ./docker/php/Dockerfile
     volumes:
       - .:/var/www/html
-    working_dir: /var/www/html
-    user: www-data
+    environment:
+      - APP_ENV=test
     command: ["bin/phpunit", "--testsuite", "functional"]
 
   integration_test:
     image: cerberus/php:7.2
     volumes:
       - .:/var/www/html
-    working_dir: /var/www/html
-    user: www-data
+    environment:
+      - APP_ENV=test
     command: ["bin/phpunit", "--testsuite", "integration"]
 
   mongo:

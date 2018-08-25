@@ -1,0 +1,8 @@
+.env.*
+.gitignore
+.travis.yml
+docker-compose.*
+Makefile
+docker/
+vendor/
+var/
