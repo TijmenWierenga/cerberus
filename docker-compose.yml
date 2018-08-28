@@ -5,14 +5,27 @@ services:
     image: cerberus/php:7.2
     ports:
       - 8080:8080
+#    networks:
+#      - proxy
+#      - default
+#    labels:
+#      - traefik.docker.network=proxy
+#      - traefik.enable=true
+#      - traefik.port=8080
+#      - traefik.backend=auth
+#      - traefik.frontend.rule=Host:cerberus.dev
+#      - traefik.frontend.entryPoints=http,https
 
   mongo:
     image: mongo:3
-    ports:
-      - 27017:27017
     volumes:
       - mongo-data:/data/db
 
 volumes:
   mongo-data:
     driver: local
+
+networks:
+  proxy:
+    external: true
+  default:
