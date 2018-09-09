@@ -32,3 +32,8 @@ user_create:
     path: /api/user
     methods: [POST]
     controller: Cerberus\Controller\UserController::create
+
+user_find_many:
+    path: /api/user
+    methods: [GET]
+    controller: Cerberus\Controller\UserController::findPaginated
