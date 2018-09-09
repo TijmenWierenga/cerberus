@@ -28,3 +28,4 @@ security:
          - { path: ^/api/client, methods: ["DELETE"], roles: ROLE_CLIENT_DELETE }
          - { path: ^/api/client, methods: ["POST"], roles: ROLE_CLIENT_CREATE }
          - { path: ^/api/user, methods: ["POST"], roles: ROLE_USER_CREATE }
+         - { path: ^/api/user, methods: ["GET"], roles: ROLE_USER_READ }
