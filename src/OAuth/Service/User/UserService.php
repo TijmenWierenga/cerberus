@@ -2,6 +2,7 @@
 
 namespace Cerberus\OAuth\Service\User;
 
+use Cerberus\Collection\PaginatedCollection;
 use Cerberus\Exception\EntityNotFoundException;
 use Cerberus\Exception\IllegalScopeException;
 use Cerberus\Exception\User\UsernameAlreadyTakenException;
@@ -67,5 +68,10 @@ class UserService
         $this->userRepository->save($user);
 
         return $user;
+    }
+
+    public function findPaginated(int $page = 1, int $perPage = 10): PaginatedCollection
+    {
+        return $this->userRepository->findPaginated($page, $perPage);
     }
 }
