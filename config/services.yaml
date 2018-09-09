@@ -67,7 +67,7 @@ services:
             - '@League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface'
             - '@League\OAuth2\Server\Repositories\ScopeRepositoryInterface'
             - '%privateKey%'
-            - '%env(APP_SECRET)%'
+            - '%app_secret%'
         calls:
             - method: enableGrantType
               arguments:
