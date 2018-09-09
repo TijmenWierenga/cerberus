@@ -59,4 +59,17 @@ final class UserController extends BaseController
 
         return new ResourceResponse($resource, Response::HTTP_CREATED);
     }
+
+    public function findPaginated(ServerRequestInterface $request): ResourceResponse
+    {
+        $collection = $this->userService->findPaginated(
+            $request->getQueryParams()['page'] ?? 1,
+            $request->getQueryParams()['per_page'] ?? 10
+        );
+
+        return new ResourceResponse(
+            $this->generateCollection($collection, new UserTransformer(), $request),
+            Response::HTTP_OK
+        );
+    }
 }
