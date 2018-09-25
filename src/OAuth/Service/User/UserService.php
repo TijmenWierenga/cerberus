@@ -74,4 +74,9 @@ class UserService
     {
         return $this->userRepository->findPaginated($page, $perPage);
     }
+
+    public function find(string $id): User
+    {
+        return $this->userRepository->find($id);
+    }
 }
