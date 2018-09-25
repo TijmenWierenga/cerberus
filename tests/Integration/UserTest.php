@@ -5,6 +5,8 @@ namespace Cerberus\Tests\Integration;
 use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\Scope;
+use Cerberus\OAuth\User;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\VarDumper\VarDumper;
@@ -67,5 +69,35 @@ class UserTest extends BaseTest
         $content = json_decode($response->getContent(), true);
         $this->assertEquals("tijmen", $content["data"][0]["username"]);
         $this->assertEquals("client_create", $content["data"][0]["scopes"]["data"][0]["id"]);
+    }
+
+    public function testUserWasFound()
+    {
+        $this->loginWithScopes('user_read');
+
+        /** @var UserRepositoryInterface $userRepository */
+        $userRepository = self::$container->get('test.' . UserRepositoryInterface::class);
+        $user = User::new(Uuid::uuid4(), "paul", "abcdef", []);
+        $userRepository->save($user);
+
+        $this->client->request("GET", "/api/user/{$user->getIdentifier()}");
+
+        $response = $this->client->getResponse();
+        $content = json_decode($response->getContent(), true);
+
+        $this->assertEquals("paul", $content["data"]["username"]);
+        $this->assertEquals($user->getIdentifier(), $content["data"]["id"]);
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testUserWasNotFound()
+    {
+        $this->loginWithScopes('user_read');
+        $randomId = Uuid::uuid4();
+        $this->client->request("GET", "/api/user/{$randomId}");
+
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 }
