@@ -72,4 +72,12 @@ final class UserController extends BaseController
             Response::HTTP_OK
         );
     }
+
+    public function find(string $id): ResourceResponse
+    {
+        return new ResourceResponse(
+            $this->generateItem($this->userService->find($id), new UserTransformer()),
+            Response::HTTP_OK
+        );
+    }
 }
