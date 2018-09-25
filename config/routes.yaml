@@ -37,3 +37,8 @@ user_find_many:
     path: /api/user
     methods: [GET]
     controller: Cerberus\Controller\UserController::findPaginated
+
+user_find:
+    path: /api/user/{id}
+    methods: [GET]
+    controller: Cerberus\Controller\UserController::find
