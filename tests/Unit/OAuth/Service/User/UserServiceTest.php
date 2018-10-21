@@ -10,10 +10,13 @@ use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\Scope;
 use Cerberus\OAuth\Service\User\CreateUserRequest;
+use Cerberus\OAuth\Service\User\UpdateUserRequest;
 use Cerberus\OAuth\Service\User\UserService;
 use Cerberus\OAuth\User;
+use Cerberus\PropertyAccess\ObjectUpdaterInterface;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
+use Ramsey\Uuid\Uuid;
 
 class UserServiceTest extends TestCase
 {
@@ -30,6 +33,10 @@ class UserServiceTest extends TestCase
      */
     private $hasher;
     /**
+     * @var ObjectUpdaterInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $updater;
+    /**
      * @var UserService
      */
     private $service;
@@ -39,7 +46,8 @@ class UserServiceTest extends TestCase
         $this->userRepository = $this->getMockBuilder(UserRepositoryInterface::class)->getMock();
         $this->scopeRepository = $this->getMockBuilder(ScopeRepositoryInterface::class)->getMock();
         $this->hasher = $this->getMockBuilder(HasherInterface::class)->getMock();
-        $this->service = new UserService($this->userRepository, $this->hasher, $this->scopeRepository);
+        $this->updater = $this->getMockBuilder(ObjectUpdaterInterface::class)->getMock();
+        $this->service = new UserService($this->userRepository, $this->hasher, $this->scopeRepository, $this->updater);
     }
 
     public function testItCreatesAUserWithoutScopes()
@@ -142,5 +150,30 @@ class UserServiceTest extends TestCase
             ->willReturn($this->getMockBuilder(User::class)->disableOriginalConstructor()->getMock());
 
         $this->service->create($request);
+    }
+
+    public function testItUpdatesAUser()
+    {
+        $user = User::new(Uuid::uuid4(),'tijmen', 'password', ['user_read']);
+
+        $request = new UpdateUserRequest((string) $user->getIdentifier(), [
+            'scopes' => ['user_read', 'user_update']
+        ]);
+
+        $this->userRepository->expects($this->once())
+            ->method('find')
+            ->with($user->getIdentifier())
+            ->willReturn($user);
+
+        $this->updater->expects($this->once())
+            ->method('update')
+            ->with($user, $request->getValues())
+            ->willReturn($user);
+
+        $this->userRepository->expects($this->once())
+            ->method('save')
+            ->with($user);
+
+        $this->service->update($request);
     }
 }

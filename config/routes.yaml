@@ -42,3 +42,8 @@ user_find:
     path: /api/user/{id}
     methods: [GET]
     controller: Cerberus\Controller\UserController::find
+
+user_update:
+    path: /api/user/{id}
+    methods: [PUT]
+    controller: Cerberus\Controller\UserController::update

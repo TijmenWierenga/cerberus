@@ -100,4 +100,28 @@ class UserTest extends BaseTest
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
+
+    public function testItUpdatesAUser()
+    {
+        $this->loginWithScopes('user_read');
+
+        /** @var ScopeRepositoryInterface $scopeRepository */
+        $scopeRepository = self::$container->get('test.' . ScopeRepositoryInterface::class);
+        $testScope = new Scope('user_test');
+        $scopeRepository->save($testScope);
+        $scopeRepository->save(new Scope('user_extra_test'));
+        /** @var UserRepositoryInterface $userRepository */
+        $userRepository = self::$container->get('test.' . UserRepositoryInterface::class);
+        $user = User::new(Uuid::uuid4(), "bart", "abcdef", [$testScope]);
+        $userRepository->save($user);
+
+        $this->client->request('PUT', "/api/user/{$user->getIdentifier()}", [
+            'scopes' => [
+                'user_extra_test'
+            ]
+        ]);
+
+        $response = $this->client->getResponse();
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
 }

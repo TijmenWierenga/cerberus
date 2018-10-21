@@ -239,6 +239,9 @@
     "symfony/property-access": {
         "version": "v4.0.9"
     },
+    "symfony/property-info": {
+        "version": "v4.1.5"
+    },
     "symfony/psr-http-message-bridge": {
         "version": "v1.0.2"
     },

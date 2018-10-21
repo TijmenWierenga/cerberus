@@ -19,6 +19,7 @@
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^4.0",
         "symfony/lts": "^4@dev",
+        "symfony/property-info": "^4.0",
         "symfony/psr-http-message-bridge": "^1.0",
         "symfony/security-bundle": "^4.0",
         "symfony/validator": "^4.0",

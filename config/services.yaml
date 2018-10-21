@@ -93,3 +93,8 @@ services:
           - method: setSerializer
             arguments:
               - '@League\Fractal\Serializer\DataArraySerializer'
+
+    Symfony\Component\PropertyInfo\PropertyInfoExtractor:
+        factory: ['Cerberus\PropertyAccess\PropertyInfoExtractorFactory', 'create']
+        arguments: ['@doctrine.odm.mongodb.document_manager']
+    Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface: '@Symfony\Component\PropertyInfo\PropertyInfoExtractor'

@@ -3,11 +3,13 @@
 namespace Cerberus\Controller;
 
 use Cerberus\OAuth\Service\User\CreateUserRequest;
+use Cerberus\OAuth\Service\User\UpdateUserRequest;
 use Cerberus\OAuth\Service\User\UserService;
 use Cerberus\Pagination\PagerfantaPaginationAdapterFactory;
 use Cerberus\Response\ResourceResponse;
 use Cerberus\Transformer\UserTransformer;
 use League\Fractal\Manager;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -79,5 +81,18 @@ final class UserController extends BaseController
             $this->generateItem($this->userService->find($id), new UserTransformer()),
             Response::HTTP_OK
         );
+    }
+
+    public function update(ServerRequestInterface $request, string $id): ResponseInterface
+    {
+        /** @var array $body */
+        $body = $request->getParsedBody();
+        // Parse body to valid request object
+
+        $this->userService->update(new UpdateUserRequest($id, $body));
+
+        return (new \Zend\Diactoros\Response())
+            ->withStatus(Response::HTTP_NO_CONTENT)
+            ->withHeader('Content-Type', 'application/json');
     }
 }

@@ -10,6 +10,7 @@ use Cerberus\Hasher\HasherInterface;
 use Cerberus\OAuth\Repository\User\UserRepositoryInterface;
 use Cerberus\OAuth\User;
 use Cerberus\OAuth\Repository\Scope\ScopeRepositoryInterface;
+use Cerberus\PropertyAccess\ObjectUpdaterInterface;
 use Ramsey\Uuid\Uuid;
 
 class UserService
@@ -26,15 +27,21 @@ class UserService
      * @var ScopeRepositoryInterface
      */
     private $scopeRepository;
+    /**
+     * @var ObjectUpdaterInterface
+     */
+    private $updater;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
         HasherInterface $hasher,
-        ScopeRepositoryInterface $scopeRepository
+        ScopeRepositoryInterface $scopeRepository,
+        ObjectUpdaterInterface $updater
     ) {
         $this->userRepository = $userRepository;
         $this->hasher = $hasher;
         $this->scopeRepository = $scopeRepository;
+        $this->updater = $updater;
     }
 
     public function create(CreateUserRequest $request): User
@@ -78,5 +85,14 @@ class UserService
     public function find(string $id): User
     {
         return $this->userRepository->find($id);
+    }
+
+    public function update(UpdateUserRequest $request): void
+    {
+        $user = $this->find($request->getId());
+        // @TODO: filter updateable values
+        /** @var User $user */
+        $user = $this->updater->update($user, $request->getValues());
+        $this->userRepository->save($user);
     }
 }
