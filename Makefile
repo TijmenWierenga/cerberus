@@ -29,7 +29,7 @@ integration-test:
 	COMPOSE_PROJECT_NAME=cerberustest docker-compose -f docker-compose.test.yml down --volumes
 test: unit-test functional-test integration-test
 create_client:
-	docker-compose run -w /var/www/html server bin/console oauth:client:create default -g password -g refresh_token -g auth_code -g client_credentials -g implicit https://www.tijmenwierenga.nl/callback
+	docker-compose -f docker-compose.yml -f docker-compose.dev.yml run -w /var/www/html server bin/console oauth:client:create default -g password -g refresh_token -g code -g client_credentials -g implicit https://www.tijmenwierenga.nl/callback
 
 .SILENT: keys server unit-test functional-test integration-test init build stop create_client test app-key
 .PHONY: server test
