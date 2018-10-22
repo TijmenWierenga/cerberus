@@ -32,9 +32,9 @@ class Kernel extends BaseKernel
 
     public function boot()
     {
-        parent::boot();
-
         $this->registerDoctrineTypes();
+
+        parent::boot();
     }
 
     public function registerBundles()
