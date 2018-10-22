@@ -1,0 +1,190 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cerberus OAuth Authorization Server",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://{docker-machine-ip}:{port}",
+            "description": "Local Docker-Machine server",
+            "variables": {
+                "docker-machine-ip": {
+                    "default": "192.168.99.100",
+                    "description": "The IP address of the docker-machine VM"
+                },
+                "port": {
+                    "default": "8080",
+                    "description": "The port the server is listening to"
+                }
+            }
+        },
+        {
+            "url": "http://localhost:{port}",
+            "description": "Localhost server",
+            "variables": {
+                "port": {
+                  "default": "8080",
+                  "description": "The port the server is listening to"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/api/client": {
+            "get": {
+                "description": "Returns a paginated list of clients",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "description": "The page to request",
+                        "in": "query"
+                    },
+                    {
+                        "name": "per_page",
+                        "description": "The amount of clients returned per page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A paginated list of clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": ["data", "meta"],
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "description": "A list of clients",
+                                            "items": {
+                                                "type": "object",
+                                                "description": "An OAuth client",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "description": "Unique identifier for a client (UUID4)"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "description": "Name of the client"
+                                                    },
+                                                    "allowed_grant_types": {
+                                                        "type": "array",
+                                                        "description": "The allowed grant types the client may use",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "description": "The name of the grant-type"
+                                                        }
+                                                    },
+                                                    "redirect_uris": {
+                                                        "type": "array",
+                                                        "description": "A list of redirect uri's",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "description": "A redirect URI"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "description": "Meta-data about the client resource",
+                                            "required":[
+                                                "pagination"
+                                            ],
+                                            "properties": {
+                                                "pagination": {
+                                                    "type": "object",
+                                                    "description": "Meta-data about pagination",
+                                                    "properties": {
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "description": "The total amount of available pages"
+                                                        },
+                                                        "count": {
+                                                            "type": "integer",
+                                                            "description": "Unknown"
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer",
+                                                            "description": "The amount of entities per page"
+                                                        },
+                                                        "current_page": {
+                                                            "type": "integer",
+                                                            "description": "The number of the current page"
+                                                        },
+                                                        "total_pages": {
+                                                            "type": "integer",
+                                                            "description": "The total amount of available pages"
+                                                        },
+                                                        "links": {
+                                                            "type": "array",
+                                                            "description": "URL's to the next/previous page",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "description": "URL's to the next/previous page",
+                                                                "properties": {
+                                                                    "next": {
+                                                                        "type": "string",
+                                                                        "description": "A URL to the next page"
+                                                                    },
+                                                                    "previous": {
+                                                                        "type": "string",
+                                                                        "description": "A URL to the previous page"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "examples": {
+                                    "success": {
+                                        "description": "A successful response returning a paginated list of clients",
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "240f7294-b533-4607-a05c-8ebc6a3103e7",
+                                                    "name": "example-client",
+                                                    "allowed_grant_types": [
+                                                        "password",
+                                                        "refresh_token",
+                                                        "code",
+                                                        "client_credentials",
+                                                        "implicit"
+                                                    ],
+                                                    "redirect_uris": [
+                                                        "https://www.tijmenwierenga.nl/callback"
+                                                    ]
+                                                }
+                                            ],
+                                            "meta": {
+                                                "pagination": {
+                                                    "total": 50,
+                                                    "count": 10,
+                                                    "per_page": 5,
+                                                    "current_page": 2,
+                                                    "total_pages": 10,
+                                                    "links": {
+                                                        "next": "http://192.168.99.100:8080/api/client?page=3&per_page=5",
+                                                        "previous": "http://192.168.99.100:8080/api/client?page=1&per_page=5"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
