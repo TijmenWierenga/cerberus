@@ -8,7 +8,7 @@
         "ext-iconv": "*",
         "alcaeus/mongo-php-adapter": "^1.1",
         "doctrine/collections": "^1.5",
-        "doctrine/mongodb-odm-bundle": "^3.4",
+        "doctrine/mongodb-odm-bundle": "^4.0",
         "league/fractal": "^0.17.0",
         "league/oauth2-server": "^6.1",
         "nelmio/cors-bundle": "^1.5",
